@@ -1,7 +1,0 @@
-package cseas002.hw5.team3;
-
-public class Test {
-    int a;
-    int b;
-    int c;
-}
