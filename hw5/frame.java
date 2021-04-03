@@ -1,7 +1,8 @@
 package cseas002.team3.hw5;
 
+
 import javax.swing.*;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,7 +11,10 @@ public class frame extends JFrame implements ActionListener{
     JButton fullscreenButton;
     JButton play, playCLI;
     boolean fullscreen;
-    frame(boolean check_fullscreen)
+    ImageIcon icon = new ImageIcon("Hangman.jpg");
+    JLabel test = new JLabel(new ImageIcon("Hangman.jpg"));
+
+    public frame(boolean check_fullscreen)
     {
         fullscreen = check_fullscreen;
         if (fullscreen)
@@ -31,7 +35,10 @@ public class frame extends JFrame implements ActionListener{
         setResizable(false);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(new Color(0, 0, 0));
+        add(test);
+        test.setBounds(0, 0, 1920, 1080);
         setLayout(null);
+        setIconImage(icon.getImage());
         if (fullscreen)
         exit_button();
     }
