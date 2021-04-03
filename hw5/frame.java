@@ -10,7 +10,6 @@ public class frame extends JFrame implements ActionListener{
     JButton fullscreenButton;
     JButton play, playCLI;
     boolean fullscreen;
-    ImageIcon fatsa = new ImageIcon("D:\\desktop\\intellij\\ShootTheNibbas\\out\\production\\ShootTheNibbas\\fatsa.png");
     frame(boolean check_fullscreen)
     {
         fullscreen = check_fullscreen;
@@ -33,7 +32,6 @@ public class frame extends JFrame implements ActionListener{
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(new Color(0, 0, 0));
         setLayout(null);
-        setIconImage(fatsa.getImage());
         if (fullscreen)
         exit_button();
     }

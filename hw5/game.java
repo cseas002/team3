@@ -20,7 +20,7 @@ public class game extends JFrame implements ActionListener {
 
     private void initialize()
     {
-        setTitle("Shoot the Nibbas");
+        setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(new Color(40, 106, 177));
