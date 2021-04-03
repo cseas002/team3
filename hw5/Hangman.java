@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hangman {
-    Scanner scan;
-    ArrayList <String> words = new ArrayList<>();
+    private final ArrayList <String> words = new ArrayList<>();
+    private boolean GUI;
 
     /**
      * Constructor with given file
      * @param file the file
+     * @throws FileNotFoundException in case file can't be found
      */
     public Hangman (File file) throws FileNotFoundException {
-        scan = new Scanner(file);
+        Scanner scan = new Scanner(file);
         while (scan.hasNext())
         {
             boolean is_word = true;
@@ -30,17 +31,25 @@ public class Hangman {
             if (is_word)
             words.add(word);
         }
+    }
 
-        for (String str : words)
-            System.out.println(str);
+    /**
+     * Constructor with given file and length of the word
+     * @param file the file
+     * @param length length of the chosen word
+     * @throws FileNotFoundException in case file can't be found
+     */
+    public Hangman(File file, int length) throws FileNotFoundException {
+        this(file);
+        words.removeIf(word -> word.length() != length); //removes all the words who have different lengths
     }
 
 
-    public static void main(String[] args) {
-        try {
-            Hangman test = new Hangman(new File("words.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws FileNotFoundException {
+            Hangman test = new Hangman(new File("words.txt"), 4);
+
+            for (String word : test.words)
+                System.out.println(word);
+
     }
 }
