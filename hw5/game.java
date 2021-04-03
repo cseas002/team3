@@ -38,9 +38,20 @@ public class game extends JFrame implements ActionListener {
     }
 
     private void initializeLetters() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 13; i++) {
             char letter = (char) (i + 'A');
             letters[i] = new JButton(Character.toString(letter));
+            letters[i].setBounds(500 + i * 70, 900, 50, 50);
+            letters[i].addActionListener(this);
+            add(letters[i]);
+        }
+
+        for (int i = 13; i < 26; i++) {
+            char letter = (char) (i + 'A');
+            letters[i] = new JButton(Character.toString(letter));
+            letters[i].setBounds(500 + (i - 13) * 70, 980, 50, 50);
+            letters[i].addActionListener(this);
+            add(letters[i]);
         }
     }
 
@@ -56,6 +67,15 @@ public class game extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit)
             System. exit(0);
+        else
+            for (JButton letter : letters)
+                if (e.getSource() == letter)
+                {
+                    char character = letter.getText().charAt(0);
+                    //method with given character here
+
+                    letter.setVisible(false);
+                }
     }
 
     public static void main(String[] args) {
