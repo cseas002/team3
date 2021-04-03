@@ -6,13 +6,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class game extends JFrame implements ActionListener {
-    JButton exit;
+    private JButton exit;
+    private final boolean fullscreen;
+    private JButton[] letters = new JButton[26];
+
     game(boolean fullscreen)
     {
-        if (fullscreen) {
+        this.fullscreen = fullscreen;
+        if (fullscreen)
             setUndecorated(true);
-            exit_button();
-        }
+
+        setContentPane(new JLabel(new ImageIcon("Hangman.jpg"))); //background
         initialize();
 
         setVisible(true);
@@ -23,8 +27,21 @@ public class game extends JFrame implements ActionListener {
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(false);
         getContentPane().setBackground(new Color(40, 106, 177));
         setLayout(null);
+        initializeLetters();
+
+        //adding buttons
+        if (fullscreen)
+            exit_button();
+    }
+
+    private void initializeLetters() {
+        for (int i = 0; i < 10; i++) {
+            char letter = (char) (i + 'A');
+            letters[i] = new JButton(Character.toString(letter));
+        }
     }
 
     private void exit_button()
@@ -39,5 +56,9 @@ public class game extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit)
             System. exit(0);
+    }
+
+    public static void main(String[] args) {
+        new game(true);
     }
 }

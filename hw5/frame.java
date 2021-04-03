@@ -12,19 +12,23 @@ public class frame extends JFrame implements ActionListener{
     JButton play, playCLI;
     boolean fullscreen;
     ImageIcon icon = new ImageIcon("Hangman.jpg");
-    JLabel test = new JLabel(new ImageIcon("Hangman.jpg"));
 
     public frame(boolean check_fullscreen)
     {
         fullscreen = check_fullscreen;
         if (fullscreen)
             setUndecorated(true);
+        setContentPane(new JLabel(new ImageIcon("Hangman.jpg"))); //background
         initialize();
-        fullscreen_button();
-        play_button();
-        play_CLI_button();
         setVisible(true);
     }
+
+    /*private void background()
+    {
+        JLabel test = new JLabel(new ImageIcon("Hangman.jpg"));
+        test.setBounds(0, 0, 1920, 1080);
+        add(test);
+    }*/
 
 
 
@@ -34,13 +38,16 @@ public class frame extends JFrame implements ActionListener{
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        getContentPane().setBackground(new Color(0, 0, 0));
-        add(test);
-        test.setBounds(0, 0, 1920, 1080);
+        getContentPane().setBackground(new Color(4, 15, 38));
         setLayout(null);
         setIconImage(icon.getImage());
+        //adding buttons
         if (fullscreen)
-        exit_button();
+            exit_button();
+
+        fullscreen_button();
+        play_button();
+        play_CLI_button();
     }
 
     private void play_button()
@@ -48,6 +55,7 @@ public class frame extends JFrame implements ActionListener{
         play = new JButton("Play Hangman with graphics!");
         play.setBounds(600,340,300,100);
         play.addActionListener(this);
+        play.setVisible(true);
         add(play);
     }
 
@@ -77,7 +85,7 @@ public class frame extends JFrame implements ActionListener{
 
     public static void main(String[] args)
     {
-        frame skata = new frame(true);
+        new frame(true);
     }
 
 
@@ -88,11 +96,11 @@ public class frame extends JFrame implements ActionListener{
         else if (e.getSource() == fullscreenButton) {
             fullscreen = !fullscreen;
             dispose();
-            frame skata = new frame(fullscreen);
+            new frame(fullscreen);
         }
         else if (e.getSource() == play) {
             dispose();
-            game my_game = new game(fullscreen);
+            new game(fullscreen);
         }
         else if (e.getSource() == playCLI)
         {
