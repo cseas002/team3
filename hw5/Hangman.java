@@ -6,8 +6,31 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hangman {
-    private final ArrayList <String> words = new ArrayList<>();
+    private ArrayList <String> words = new ArrayList<>();
+    private String[] wordsInArray;
     private boolean GUI;
+    public GameLogic gameLogic;
+
+    /**
+     * Constructor with given ArrayList of Strings
+     * @param words ArrayList of Strings
+     */
+    public Hangman(ArrayList<String> words)
+    {
+        this.words = new ArrayList<>(words);
+        gameLogic = new GameLogic(toArray());
+    }
+
+    /**
+     * Constructor with given array of Strings
+     * @param wordsInArray String array
+     */
+    public Hangman(String[] wordsInArray)
+    {
+        this.wordsInArray = new String[wordsInArray.length];
+        System.arraycopy(wordsInArray, 0, this.wordsInArray, 0, wordsInArray.length);
+        gameLogic = new GameLogic(wordsInArray);
+    }
 
     /**
      * Constructor with given file
@@ -31,6 +54,7 @@ public class Hangman {
             if (is_word)
             words.add(word);
         }
+        gameLogic = new GameLogic(toArray());
     }
 
     /**
@@ -44,12 +68,38 @@ public class Hangman {
         words.removeIf(word -> word.length() != length); //removes all the words who have different lengths
     }
 
+    private String[] toArray()
+    {
+        wordsInArray = words.toString().split("\\W+");
+        return wordsInArray;
+    }
+
+    public int playerMove(char c)
+    {
+        return gameLogic.playerMove(c);
+    }
+
+    public String getCurrentAnswerFramework()
+    {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
+        for (int i = 0; i < wordsInArray.length; i++)
+            if (wordsInArray[i].length() != 4)
+                wordsInArray[i] = "";
+
+        gameLogic.printallwords();
+        return gameLogic.getCurrentAnswerFramework();
+    }
+
+    public String getFinalWord()
+    {
+        return gameLogic.getFinalWord();
+    }
 
     public static void main(String[] args) throws FileNotFoundException {
             Hangman test = new Hangman(new File("words.txt"), 4);
 
             for (String word : test.words)
                 System.out.println(word);
-
     }
 }
