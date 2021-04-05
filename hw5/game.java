@@ -16,29 +16,33 @@ public class game extends JFrame implements ActionListener {
     private Hangman hangman;
     private boolean wrong = true;
     private int wrongChoose;
-    private char[] lettersInWord = {'t', 'e', 's', 't'};
-    private boolean[] foundLetters = new boolean[4];
-    private char[] previousAnswer;
+    private char[] answer;
+    private boolean[] foundLetters;
+    private int length;
 
     public game(boolean fullscreen)
     {
-       /* try {
-            hangman = new Hangman(new File("words.txt"));
+        /*
+        length = (int) (4 + Math.random() * 10);
+        try {
+            hangman = new Hangman(new File("words.txt"), length);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }*/
-        hangman = new Hangman(new String[] {"test"});
+        }//*/
+        hangman = new Hangman(new String[] {"Bob","dog","pub","pad","wog","pog","gog","org"});
         this.fullscreen = fullscreen;
         if (fullscreen)
             setUndecorated(true);
 
-        for (int i = 0; i < Integer.min(hangman.gameLogic.answer.length, lettersInWord.length); i++)
-            lettersInWord[i] = hangman.gameLogic.answer[i];
-
+        length = 3;
+        foundLetters = new boolean[length];
+        answer = hangman.gameLogic.getAnswer();
+        hangman.gameLogic.printallwords();
 
         initialize();
 
         setVisible(true);
+
     }
 
     private void initialize()
@@ -46,22 +50,27 @@ public class game extends JFrame implements ActionListener {
         Background();
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+       // setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
         setResizable(false);
         getContentPane().setBackground(new Color(40, 106, 177));
         setLayout(null);
         initializeLetters();
         createUnderscoresAndLetters();
+        checkDone();
 
         //adding buttons
         if (fullscreen)
             exit_button();
+
+        setVisible(true);
+
     }
 
     private void createUnderscoresAndLetters() {
         for (int i = 0; i < foundLetters.length; i++) {
             //if the letter is found it will print the letter, otherwise underscore
-            JLabel letter = foundLetters[i] ? new JLabel(Character.toString(lettersInWord[i])) : new JLabel("_");
+            JLabel letter = foundLetters[i] ? new JLabel(Character.toString(answer[i])) : new JLabel("_");
             add(letter);
             letter.setFont((new Font("Test", Font.PLAIN, 60)));
             letter.setBounds(1000 + i * 50, 100, 1000, 1000);
@@ -155,40 +164,23 @@ public class game extends JFrame implements ActionListener {
                 {
                     notVisible[i] = true;
                     char character = letters[i].getText().charAt(0);
-                    hangman.playerMove(character);
-                    //System.out.println(hangman.gameLogic.answer);
-                    //System.out.println(lettersInWord[0]);
-                    for (int j = 0; j < hangman.gameLogic.answer.length; j++)
-                        Character.toUpperCase(hangman.gameLogic.answer[j]);
-                    if (Arrays.equals(hangman.gameLogic.answer, lettersInWord))
-                        wrongChoose ++;
+                    if (hangman.playerMove(character) == 0)
+                         wrongChoose ++;
 
                     //from this line
-                    for (int j = 0; j < Integer.min(hangman.gameLogic.answer.length, lettersInWord.length); j++)
-                        if (Character.isAlphabetic(hangman.gameLogic.answer[j])) {
-                            lettersInWord[j] = hangman.gameLogic.answer[j];
+                    for (int j = 0; j < Integer.min(hangman.gameLogic.getAnswer().length, answer.length); j++)
+                        if (Character.isAlphabetic(hangman.gameLogic.getAnswer()[j])) {
+                            answer[j] = hangman.gameLogic.getAnswer()[j];
                             foundLetters[j] = true;
                         }
 
                     System.out.println();
-                    for (int j = 0; j < hangman.gameLogic.answer.length; j++)
-                        System.out.print(hangman.gameLogic.answer[j]);
+                    for (int j = 0; j < hangman.gameLogic.getAnswer().length; j++)
+                        System.out.print(hangman.gameLogic.getAnswer()[j]);
 
                     System.out.println();
-                    for (int j = 0; j < lettersInWord.length; j++)
-                        System.out.print(lettersInWord[j]);
+                    for (char c : answer) System.out.print(c);
 
-
-                    for (int j = 0; j < hangman.gameLogic.answer.length; j++)
-                    {
-                        if (lettersInWord[j] != hangman.gameLogic.answer[j] || !Character.isAlphabetic(hangman.gameLogic.answer[j])) {
-                            wrongChoose ++;
-                            break;
-                        }
-                        if (j == 3)
-                            System.exit(0);
-
-                    }
                     //to this line is just for testing
 
 
@@ -196,6 +188,36 @@ public class game extends JFrame implements ActionListener {
 
                     //letters[i].setVisible(false);
                 }
+    }
+
+    private void checkDone() {
+        checkWin();
+        checkLose();
+    }
+
+    private void checkLose() {
+        if (wrongChoose >= 6)
+            //class for losing
+            System.exit(0);
+    }
+
+    private void checkWin() {
+        boolean done = true;
+        for (boolean word : foundLetters)
+            if (!word) {
+                done = false;
+                break;
+            }
+
+        if (!done)
+            return ;
+
+        //class for winning
+        revalidate();
+        setVisible(true);
+        long time = System.currentTimeMillis();
+        while (System.currentTimeMillis() - time < 5000);
+        System.exit(1);
     }
 
     public static void main(String[] args) {

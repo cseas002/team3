@@ -9,6 +9,7 @@ public class Hangman {
     private ArrayList <String> words = new ArrayList<>();
     private String[] wordsInArray;
     private boolean GUI;
+    private int length;
     public GameLogic gameLogic;
 
     /**
@@ -18,7 +19,7 @@ public class Hangman {
     public Hangman(ArrayList<String> words)
     {
         this.words = new ArrayList<>(words);
-        gameLogic = new GameLogic(toArray());
+        gameLogic = new GameLogic(toArray(), (int) (4 + Math.random() * 10));
     }
 
     /**
@@ -27,9 +28,10 @@ public class Hangman {
      */
     public Hangman(String[] wordsInArray)
     {
-        this.wordsInArray = new String[wordsInArray.length];
-        System.arraycopy(wordsInArray, 0, this.wordsInArray, 0, wordsInArray.length);
-        gameLogic = new GameLogic(wordsInArray);
+      //  this.wordsInArray = new String[wordsInArray.length];
+      //  System.arraycopy(wordsInArray, 0, this.wordsInArray, 0, wordsInArray.length);
+       // length = 3;
+        gameLogic = new GameLogic(wordsInArray, 3);
     }
 
     /**
@@ -38,23 +40,7 @@ public class Hangman {
      * @throws FileNotFoundException in case file can't be found
      */
     public Hangman (File file) throws FileNotFoundException {
-        Scanner scan = new Scanner(file);
-        while (scan.hasNext())
-        {
-            boolean is_word = true;
-            String word = scan.next();
-            for (int i = 0; i < word.length(); i++)
-                //true if the character is a Latin letter
-                if (word.charAt(i) < 65 || word.charAt(i) > 122 || (word.charAt(i) > 90 && word.charAt(i) < 97))
-                {
-                    is_word = false;
-                    break;
-                }
-
-            if (is_word)
-            words.add(word);
-        }
-        gameLogic = new GameLogic(toArray());
+        this(file, (int) (4 + Math.random() * 10));
     }
 
     /**
@@ -64,8 +50,30 @@ public class Hangman {
      * @throws FileNotFoundException in case file can't be found
      */
     public Hangman(File file, int length) throws FileNotFoundException {
-        this(file);
-        words.removeIf(word -> word.length() != length); //removes all the words who have different lengths
+        if (length == 0)
+            length = (int) (4 + Math.random() * 10);
+
+        this.length = length;
+
+        Scanner scan = new Scanner(file);
+        while (scan.hasNext())
+        {
+            boolean is_word = true;
+            String word = scan.next();
+            for (int i = 0; i < word.length(); i++)
+                //true if the character is a Latin letter
+                if (word.charAt(i) < 65 || word.charAt(i) > 122 || (word.charAt(i) > 90 && word.charAt(i) < 97) || word.length() != length)
+                {
+                    is_word = false;
+                    break;
+                }
+
+            if (is_word)
+                words.add(word);
+        }
+
+       // words.removeIf(word -> word.length() != this.length); //removes all the words who have different lengths
+        gameLogic = new GameLogic(toArray(), length);
     }
 
     private String[] toArray()
@@ -79,6 +87,7 @@ public class Hangman {
         return gameLogic.playerMove(c);
     }
 
+    /*
     public String getCurrentAnswerFramework()
     {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
@@ -89,7 +98,7 @@ public class Hangman {
 
         gameLogic.printallwords();
         return gameLogic.getCurrentAnswerFramework();
-    }
+    }//*/
 
     public String getFinalWord()
     {
@@ -97,7 +106,7 @@ public class Hangman {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-            Hangman test = new Hangman(new File("words.txt"), 4);
+            Hangman test = new Hangman(new File("words.txt"), (int) (4 + Math.random() * 10));
 
             for (String word : test.words)
                 System.out.println(word);

@@ -1,5 +1,6 @@
 package cseas002.team3.hw5;
 
+import java.util.Arrays;
 import java.util.HashMap;
 /**
  * Javadoc TBA
@@ -12,7 +13,7 @@ public class GameLogic {
 	public static final int LETTERPOP=(int)('Z'-'A')+1;
 	
 	private Word[] words;//The array of words we can choose from
-	private char[] answer; //The answer
+	private final char[] answer; //The answer
 	
 	/**
 	 * Constructs a GameLogic for the given lexicon, with the answer having the given length.
@@ -28,9 +29,7 @@ public class GameLogic {
 			throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
 		}
 		answer=new char[wordLength];
-		for(int i=0;i<answer.length;++i) {
-			answer[i]=' ';
-		}
+		Arrays.fill(answer, ' ');
 		words=new Word[lexicon.length];
 		for(int i=0;i<lexicon.length;++i) {
 			words[i]=new Word(lexicon[i]);
@@ -80,7 +79,7 @@ public class GameLogic {
 	 * 
 	 * @return one word that can satisfy the framework we have.
 	 */
-	public String getaFinalWord() {
+	public String getFinalWord() {
 		return words[0].toString();
 	}
 	
@@ -120,19 +119,19 @@ public class GameLogic {
 		//Best configuration is the most popular configuration
 		
 		//We use this for loop to find the most popular configuration, using the map to do so in O(N) complexity
-		for(int i=0;i<words.length;++i) {
-			int tmp=words[i].letterConfig[letter];
+		for (Word value : words) {
+			int tmp = value.letterConfig[letter];
 			//If its the first time we see the configuration associate it with a population of 1
-			if(!map.containsKey(tmp)) {
+			if (!map.containsKey(tmp)) {
 				map.put(tmp, 1);
 			}
 			//Otherwise increase the population by 1
 			else {
-				map.put(tmp, map.get(tmp)+1);
+				map.put(tmp, map.get(tmp) + 1);
 			}
 			//If temporary configuration is now more popular than previous best configuration, then tmp is the new best Configuration.
-			if(map.get(bestConfiguration)<map.get(tmp)) {
-				bestConfiguration=tmp;
+			if (map.get(bestConfiguration) < map.get(tmp)) {
+				bestConfiguration = tmp;
 			}
 		}
 		//We will now remove all the words that dont contain the popular configuration from our array.
@@ -140,9 +139,9 @@ public class GameLogic {
 		Word[] newWords=new Word[map.get(bestConfiguration)];
 		//Add to the new array all the words that stay
 		int count=0;
-		for(int i=0;i<words.length;++i) {
-			if(words[i].letterConfig[letter]==bestConfiguration) {
-				newWords[count]=words[i];
+		for (Word word : words) {
+			if (word.letterConfig[letter] == bestConfiguration) {
+				newWords[count] = word;
 				++count;
 			}
 		}
@@ -163,10 +162,14 @@ public class GameLogic {
 		}
 		return c;
 	}
-	
+
+	public char[] getAnswer() {
+		return answer;
+	}
+
 	private class Word {
 		//private String s;
-		private int[] letterConfig;
+		private final int[] letterConfig;
 		private Word(String word) {
 			letterConfig=new int[LETTERPOP];
 			for(int i=0;i<word.length();++i) {
@@ -190,15 +193,13 @@ public class GameLogic {
 				size+=addCharToCharArray(bigans,(char)(i+'a'),letterConfig[i]);
 			}
 			char[] ans=new char[size];
-			for(int i=0;i<size;++i) {
-				ans[i]=bigans[i];
-			}
+			if (size >= 0) System.arraycopy(bigans, 0, ans, 0, size);
 			return new String(ans);
 		}
 	}
 	
 	//The main I used to test this class
-	/*
+
 	public static void main (String args[]) {
 		String[] lexicon= {"Bob","dog","pub","pad","wog","pog","gog","org","potatopoophead"};
 		GameLogic gl=new GameLogic(lexicon,3);
@@ -217,10 +218,10 @@ public class GameLogic {
 		gl.printallwords();
 		
 	}
-	private void printallwords() {
+	public void printallwords() {
 		System.out.println("ans ="+new String(answer));
-		for(int i=0;i<words.length;++i) {
-			System.out.println(words[i]);
+		for (Word word : words) {
+			System.out.println(word);
 		}
 	}
 	//*/
