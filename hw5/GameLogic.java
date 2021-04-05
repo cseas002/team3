@@ -23,7 +23,8 @@ public class GameLogic {
 
 
 		//answer=new char[lexicon[0].length()];
-		answer=new char[1 + (int) (Math.random() * 7)];
+		//answer=new char[1 + (int) (Math.random() * 7)];
+		answer = new char[4];
 
 
 

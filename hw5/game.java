@@ -158,9 +158,12 @@ public class game extends JFrame implements ActionListener {
                     hangman.playerMove(character);
                     //System.out.println(hangman.gameLogic.answer);
                     //System.out.println(lettersInWord[0]);
-               //     if (Arrays.equals(hangman.gameLogic.answer, lettersInWord))
-                    //    wrongChoose ++;
+                    for (int j = 0; j < hangman.gameLogic.answer.length; j++)
+                        Character.toUpperCase(hangman.gameLogic.answer[j]);
+                    if (Arrays.equals(hangman.gameLogic.answer, lettersInWord))
+                        wrongChoose ++;
 
+                    //from this line
                     for (int j = 0; j < Integer.min(hangman.gameLogic.answer.length, lettersInWord.length); j++)
                         if (Character.isAlphabetic(hangman.gameLogic.answer[j])) {
                             lettersInWord[j] = hangman.gameLogic.answer[j];
@@ -186,6 +189,7 @@ public class game extends JFrame implements ActionListener {
                             System.exit(0);
 
                     }
+                    //to this line is just for testing
 
 
                     initialize();
