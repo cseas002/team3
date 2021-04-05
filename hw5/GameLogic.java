@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class GameLogic {
 	private int a;
-	
+	//test
 	public static final int LETTERPOP=('Z'-'A')+1;
 	
 	private Word[] words;
