@@ -6,6 +6,7 @@ import java.util.HashMap;
  * Javadoc TBA
  */
 public class GameLogic {
+	private int a;
 	
 	public static final int LETTERPOP=('Z'-'A')+1;
 	
