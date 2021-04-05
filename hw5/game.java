@@ -12,12 +12,11 @@ public class game extends JFrame implements ActionListener {
     private JButton exit;
     private final boolean fullscreen;
     private final JButton[] letters = new JButton[26];
-    private boolean[] notVisible = new boolean[26];
-    private Hangman hangman;
-    private boolean wrong = true;
+    private final boolean[] notVisible = new boolean[26];
+    private final Hangman hangman;
     private int wrongChoose;
-    private char[] answer;
-    private boolean[] foundLetters;
+    private final char[] answer;
+    private final boolean[] foundLetters;
     private int length;
 
     public game(boolean fullscreen)
@@ -37,7 +36,6 @@ public class game extends JFrame implements ActionListener {
         length = 3;
         foundLetters = new boolean[length];
         answer = hangman.gameLogic.getAnswer();
-        hangman.gameLogic.printallwords();
 
         initialize();
 
@@ -51,20 +49,18 @@ public class game extends JFrame implements ActionListener {
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
        // setExtendedState(JFrame.MAXIMIZED_BOTH);
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
         setResizable(false);
         getContentPane().setBackground(new Color(40, 106, 177));
         setLayout(null);
         initializeLetters();
-        createUnderscoresAndLetters();
         checkDone();
 
         //adding buttons
-        if (fullscreen)
+        if (fullscreen) {
             exit_button();
-
-        setVisible(true);
-
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
+        }
+        createUnderscoresAndLetters();
     }
 
     private void createUnderscoresAndLetters() {
@@ -73,7 +69,7 @@ public class game extends JFrame implements ActionListener {
             JLabel letter = foundLetters[i] ? new JLabel(Character.toString(answer[i])) : new JLabel("_");
             add(letter);
             letter.setFont((new Font("Test", Font.PLAIN, 60)));
-            letter.setBounds(1000 + i * 50, 100, 1000, 1000);
+            letter.setBounds(getWidth() / 2 + i * getWidth() / 40, getHeight() / 10, getWidth() / 2, getHeight());
             revalidate();
             letter.setVisible(true);
         }
@@ -174,13 +170,6 @@ public class game extends JFrame implements ActionListener {
                             foundLetters[j] = true;
                         }
 
-                    System.out.println();
-                    for (int j = 0; j < hangman.gameLogic.getAnswer().length; j++)
-                        System.out.print(hangman.gameLogic.getAnswer()[j]);
-
-                    System.out.println();
-                    for (char c : answer) System.out.print(c);
-
                     //to this line is just for testing
 
 
@@ -213,10 +202,10 @@ public class game extends JFrame implements ActionListener {
             return ;
 
         //class for winning
-        revalidate();
-        setVisible(true);
-        long time = System.currentTimeMillis();
-        while (System.currentTimeMillis() - time < 5000);
+      //  revalidate();
+       // setVisible(true);
+       // long time = System.currentTimeMillis();
+       // while (System.currentTimeMillis() - time < 5000);
         System.exit(1);
     }
 

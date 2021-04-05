@@ -36,8 +36,11 @@ public class frame extends JFrame implements ActionListener{
     {
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(false);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setResizable(true);
+       // setExtendedState(100);
+        setBounds(0, 0, 800, 600);
+        pack();
+      //  setExtendedState(JFrame.MAXIMIZED_BOTH);
         getContentPane().setBackground(new Color(4, 15, 38));
         setLayout(null);
         setIconImage(icon.getImage());
