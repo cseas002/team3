@@ -34,29 +34,35 @@ public class frame extends JFrame implements ActionListener{
 
     private void initialize()
     {
+        revalidate();
+        repaint();
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(true);
        // setExtendedState(100);
         setBounds(0, 0, 800, 600);
-        pack();
-      //  setExtendedState(JFrame.MAXIMIZED_BOTH);
+       // pack();
+        if (fullscreen)
         getContentPane().setBackground(new Color(4, 15, 38));
-        setLayout(null);
+        //setLayout(null);
         setIconImage(icon.getImage());
         //adding buttons
-        if (fullscreen)
+        if (fullscreen) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
             exit_button();
+        }
 
         fullscreen_button();
         play_button();
         play_CLI_button();
+
+        System.out.println(getWidth() + " " + getHeight());
     }
 
     private void play_button()
     {
         play = new JButton("Play Hangman with graphics!");
-        play.setBounds(600,340,300,100);
+        play.setBounds(getWidth() / 3, getHeight() / 3,getWidth() / 6,getHeight() / 10);
         play.addActionListener(this);
         play.setVisible(true);
         add(play);
@@ -64,7 +70,7 @@ public class frame extends JFrame implements ActionListener{
 
     private void play_CLI_button() {
         playCLI = new JButton("Play Hangman without graphics!");
-        playCLI.setBounds(1000,340,300,100);
+        playCLI.setBounds(1000,340,getWidth() / 6,getHeight() / 10);
         playCLI.addActionListener(this);
         add(playCLI);
     }
@@ -80,7 +86,7 @@ public class frame extends JFrame implements ActionListener{
     private void fullscreen_button()
     {
         fullscreenButton = fullscreen ? new JButton("Exit Fullscreen") : new JButton("Fullscreen");
-        fullscreenButton.setBounds(850,640,200,100);
+        fullscreenButton.setBounds(getWidth() / 2,getHeight() * 6 / 10,getWidth() / 6,getHeight() / 10);
         fullscreenButton.addActionListener(this);
         add(fullscreenButton);
     }
