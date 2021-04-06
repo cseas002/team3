@@ -119,8 +119,8 @@ public class GameLogic {
 		//Best configuration is the most popular configuration
 		
 		//We use this for loop to find the most popular configuration, using the map to do so in O(N) complexity
-		for (Word value : words) {
-			int tmp = value.letterConfig[letter];
+		for (Word w : words) {
+			int tmp = w.letterConfig[letter];
 			//If its the first time we see the configuration associate it with a population of 1
 			if (!map.containsKey(tmp)) {
 				map.put(tmp, 1);
@@ -130,7 +130,9 @@ public class GameLogic {
 				map.put(tmp, map.get(tmp) + 1);
 			}
 			//If temporary configuration is now more popular than previous best configuration, then tmp is the new best Configuration.
-			if (map.get(bestConfiguration) < map.get(tmp)) {
+			int compare=map.get(bestConfiguration)-map.get(tmp);
+			//In case of a tie we have a bias towards the configuration that has the least instances of the letter in question.
+			if (compare<0||(compare==0&&Integer.bitCount(tmp)<Integer.bitCount(bestConfiguration))) {
 				bestConfiguration = tmp;
 			}
 		}
@@ -215,6 +217,8 @@ public class GameLogic {
 		gl.playerMove('g');
 		gl.printallwords();
 		gl.playerMove('w');
+		gl.printallwords();
+		gl.playerMove('p');
 		gl.printallwords();
 		
 	}
