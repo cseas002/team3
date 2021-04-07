@@ -13,12 +13,13 @@ public class frame extends JFrame implements ActionListener{
     boolean fullscreen;
     ImageIcon icon = new ImageIcon("Hangman.jpg");
 
-    public frame(boolean check_fullscreen)
+    public frame(boolean fullscreen)
     {
-        fullscreen = check_fullscreen;
+        this.fullscreen = fullscreen;
         if (fullscreen)
             setUndecorated(true);
         setContentPane(new JLabel(new ImageIcon("Hangman.jpg"))); //background
+        setSize(800, 600);
         initialize();
         setVisible(true);
     }
@@ -38,9 +39,9 @@ public class frame extends JFrame implements ActionListener{
         repaint();
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(true);
        // setExtendedState(100);
-        setBounds(0, 0, 800, 600);
+        setMinimumSize(new Dimension());
+        setResizable(true);
        // pack();
         if (fullscreen)
         getContentPane().setBackground(new Color(4, 15, 38));
@@ -48,7 +49,7 @@ public class frame extends JFrame implements ActionListener{
         setIconImage(icon.getImage());
         //adding buttons
         if (fullscreen) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
             exit_button();
         }
 
@@ -70,7 +71,7 @@ public class frame extends JFrame implements ActionListener{
 
     private void play_CLI_button() {
         playCLI = new JButton("Play Hangman without graphics!");
-        playCLI.setBounds(1000,340,getWidth() / 6,getHeight() / 10);
+        playCLI.setBounds(getWidth() / 2,getHeight() / 3,getWidth() / 6,getHeight() / 10);
         playCLI.addActionListener(this);
         add(playCLI);
     }
@@ -78,7 +79,7 @@ public class frame extends JFrame implements ActionListener{
     private void exit_button()
     {
         exit = new JButton("X");
-        exit.setBounds(1850, 0, 70, 30);
+        exit.setBounds(getWidth() - getWidth() / 20, 0, 5 * getWidth() / 100, getHeight() / 30);
         exit.addActionListener(this);
         add(exit);
     }
