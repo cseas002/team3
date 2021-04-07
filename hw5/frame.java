@@ -3,10 +3,9 @@ package cseas002.team3.hw5;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-public class frame extends JFrame implements ActionListener{
+public class frame extends JFrame implements ActionListener {
     JButton exit;
     JButton fullscreenButton;
     JButton play, playCLI;
@@ -16,8 +15,8 @@ public class frame extends JFrame implements ActionListener{
     public frame(boolean fullscreen)
     {
         this.fullscreen = fullscreen;
-        if (fullscreen)
-            setUndecorated(true);
+     //   if (fullscreen)
+     //       setUndecorated(true);
         setContentPane(new JLabel(new ImageIcon("Hangman.jpg"))); //background
         setSize(800, 600);
         initialize();
@@ -35,35 +34,50 @@ public class frame extends JFrame implements ActionListener{
 
     private void initialize()
     {
-        revalidate();
-        repaint();
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
        // setExtendedState(100);
-        setMinimumSize(new Dimension());
         setResizable(true);
        // pack();
-        if (fullscreen)
-        getContentPane().setBackground(new Color(4, 15, 38));
-        //setLayout(null);
+      //  if (fullscreen)
+     //   getContentPane().setBackground(new Color(4, 15, 38));
         setIconImage(icon.getImage());
+
         //adding buttons
         if (fullscreen) {
             GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
             exit_button();
         }
 
+        addButtons();
+
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                setSize(getWidth(), getHeight());
+                removeButtons();
+                addButtons();
+            }
+        });
+    }
+
+    private void removeButtons()
+    {
+        remove(play);
+        remove(playCLI);
+        remove(fullscreenButton);
+    }
+
+
+    private void addButtons() {
         fullscreen_button();
         play_button();
         play_CLI_button();
-
-        System.out.println(getWidth() + " " + getHeight());
     }
 
     private void play_button()
     {
         play = new JButton("Play Hangman with graphics!");
-        play.setBounds(getWidth() / 3, getHeight() / 3,getWidth() / 6,getHeight() / 10);
+        play.setBounds(getWidth() / 4, getHeight() / 3,getWidth() / 6,getHeight() / 10);
         play.addActionListener(this);
         play.setVisible(true);
         add(play);
@@ -71,7 +85,7 @@ public class frame extends JFrame implements ActionListener{
 
     private void play_CLI_button() {
         playCLI = new JButton("Play Hangman without graphics!");
-        playCLI.setBounds(getWidth() / 2,getHeight() / 3,getWidth() / 6,getHeight() / 10);
+        playCLI.setBounds(getWidth() * 1100 / 1920,getHeight() / 3,getWidth() / 6,getHeight() / 10);
         playCLI.addActionListener(this);
         add(playCLI);
     }
@@ -87,7 +101,7 @@ public class frame extends JFrame implements ActionListener{
     private void fullscreen_button()
     {
         fullscreenButton = fullscreen ? new JButton("Exit Fullscreen") : new JButton("Fullscreen");
-        fullscreenButton.setBounds(getWidth() / 2,getHeight() * 6 / 10,getWidth() / 6,getHeight() / 10);
+        fullscreenButton.setBounds(getWidth() * 4 / 10,getHeight() * 6 / 10,getWidth() / 6,getHeight() / 10);
         fullscreenButton.addActionListener(this);
         add(fullscreenButton);
     }
@@ -110,11 +124,12 @@ public class frame extends JFrame implements ActionListener{
         }
         else if (e.getSource() == play) {
             dispose();
-            new game(fullscreen);
+            new game(fullscreen, getWidth(), getHeight());
         }
         else if (e.getSource() == playCLI)
         {
             dispose();
         }
     }
+
 }

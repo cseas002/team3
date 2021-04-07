@@ -4,12 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 public class game extends JFrame implements ActionListener {
     private JButton exit;
+    private JLabel[] lettersLabels;
     private final boolean fullscreen;
     private final JButton[] letters = new JButton[26];
     private final boolean[] notVisible = new boolean[26];
@@ -18,9 +21,13 @@ public class game extends JFrame implements ActionListener {
     private final char[] answer;
     private final boolean[] foundLetters;
     private int length;
+    private int width, height;
 
-    public game(boolean fullscreen)
+    public game(boolean fullscreen, int width, int height)
     {
+        this.width = width;
+        this.height = height;
+        setSize(width, height);
         /*
         length = (int) (4 + Math.random() * 10);
         try {
@@ -30,11 +37,14 @@ public class game extends JFrame implements ActionListener {
         }//*/
         hangman = new Hangman(new String[] {"Bob","dog","pub","pad","wog","pog","gog","org"});
         this.fullscreen = fullscreen;
-        if (fullscreen)
-            setUndecorated(true);
+     //   if (fullscreen) {
+     //       GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
+     //       exit_button();
+     //   }
 
         length = 3;
         foundLetters = new boolean[length];
+        lettersLabels = new JLabel[length];
         answer = hangman.gameLogic.getAnswer();
 
         initialize();
@@ -49,10 +59,22 @@ public class game extends JFrame implements ActionListener {
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
        // setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setResizable(false);
+        setResizable(true);
         getContentPane().setBackground(new Color(40, 106, 177));
-        setLayout(null);
+       // setLayout(null);
         initializeLetters();
+
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                setSize(getWidth(), getHeight());
+                removeLetters();
+                removeUnderscoresAndLetters();
+                createUnderscoresAndLetters();
+                initializeLetters();
+            }
+        });
+
+
         checkDone();
 
         //adding buttons
@@ -66,13 +88,19 @@ public class game extends JFrame implements ActionListener {
     private void createUnderscoresAndLetters() {
         for (int i = 0; i < foundLetters.length; i++) {
             //if the letter is found it will print the letter, otherwise underscore
-            JLabel letter = foundLetters[i] ? new JLabel(Character.toString(answer[i])) : new JLabel("_");
-            add(letter);
-            letter.setFont((new Font("Test", Font.PLAIN, 60)));
-            letter.setBounds(getWidth() / 2 + i * getWidth() / 40, getHeight() / 10, getWidth() / 2, getHeight());
+            lettersLabels[i] = foundLetters[i] ? new JLabel(Character.toString(answer[i])) : new JLabel("_");
+            add(lettersLabels[i]);
+            lettersLabels[i].setFont((new Font("Test", Font.PLAIN, getWidth() / 32)));
+            lettersLabels[i].setBounds(getWidth() / 2 + i * getWidth() / 40, getHeight() / 10, getWidth() / 2, getHeight());
             revalidate();
-            letter.setVisible(true);
+            lettersLabels[i].setVisible(true);
         }
+    }
+
+    private void removeUnderscoresAndLetters()
+    {
+        for (JLabel letter : lettersLabels)
+            remove(letter);
     }
 
     private void Background() {
@@ -126,7 +154,7 @@ public class game extends JFrame implements ActionListener {
                 continue;
             char letter = (char) (i + 'A');
             letters[i] = new JButton(Character.toString(letter));
-            letters[i].setBounds(500 + i * 70, 900, 50, 50);
+            letters[i].setBounds(getWidth() / 20 + i * getWidth() / 15, getHeight() * 75 / 100, getHeight() / 13, getHeight() / 13);
             letters[i].addActionListener(this);
             add(letters[i]);
         }
@@ -136,10 +164,16 @@ public class game extends JFrame implements ActionListener {
                 continue;
             char letter = (char) (i + 'A');
             letters[i] = new JButton(Character.toString(letter));
-            letters[i].setBounds(500 + (i - 13) * 70, 980, 50, 50);
+            letters[i].setBounds(getWidth() / 20 + (i - 13) * getWidth() / 15, getHeight() * 85 / 100, getHeight() / 13, getHeight() / 13);
             letters[i].addActionListener(this);
             add(letters[i]);
         }
+    }
+
+    private void removeLetters()
+    {
+        for (JButton letter : letters)
+            remove(letter);
     }
 
     private void exit_button()
@@ -210,6 +244,6 @@ public class game extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new game(true);
+        new game(false, 800, 600);
     }
 }
