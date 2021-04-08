@@ -5,42 +5,47 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class frame extends JFrame implements ActionListener {
-    JButton exit;
-    JButton fullscreenButton;
-    JButton play, playCLI;
-    boolean fullscreen;
-    ImageIcon icon = new ImageIcon("Hangman.jpg");
+public abstract class Frame extends JFrame implements ActionListener {
 
-    public frame(boolean fullscreen)
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public ImageIcon getIcon() {
+        return icon;
+    }
+
+    private JButton exit;
+    private JButton fullscreenButton;
+    private JButton play, playCLI;
+    private boolean fullscreen;
+    public ImageIcon icon = new ImageIcon("Hangman.jpg");
+
+    public Frame(boolean fullscreen, int width, int height)
     {
         this.fullscreen = fullscreen;
-     //   if (fullscreen)
-     //       setUndecorated(true);
         setContentPane(new JLabel(new ImageIcon("Hangman.jpg"))); //background
-        setSize(800, 600);
+        if (!fullscreen)
+        setSize(width, height);
         initialize();
         setVisible(true);
     }
 
-    /*private void background()
+    public Frame(int width, int height)
     {
-        JLabel test = new JLabel(new ImageIcon("Hangman.jpg"));
-        test.setBounds(0, 0, 1920, 1080);
-        add(test);
-    }*/
+        this(false, width, height);
+    }
 
+    public Frame()
+    {
+        this(true, 0, 0);
+    }
 
-
-    private void initialize()
+    protected void initialize()
     {
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-       // setExtendedState(100);
         setResizable(true);
-       // pack();
-      //  if (fullscreen)
-     //   getContentPane().setBackground(new Color(4, 15, 38));
         setIconImage(icon.getImage());
 
         //adding buttons
@@ -50,17 +55,19 @@ public class frame extends JFrame implements ActionListener {
         }
 
         addButtons();
-
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 setSize(getWidth(), getHeight());
                 removeButtons();
                 addButtons();
+                removeLabels();
             }
         });
     }
 
-    private void removeButtons()
+    protected abstract void removeLabels();
+
+    protected void removeButtons()
     {
         remove(play);
         remove(playCLI);
@@ -68,7 +75,7 @@ public class frame extends JFrame implements ActionListener {
     }
 
 
-    private void addButtons() {
+    protected void addButtons() {
         fullscreen_button();
         play_button();
         play_CLI_button();
@@ -90,7 +97,7 @@ public class frame extends JFrame implements ActionListener {
         add(playCLI);
     }
 
-    private void exit_button()
+    protected void exit_button()
     {
         exit = new JButton("X");
         exit.setBounds(getWidth() - getWidth() / 20, 0, 5 * getWidth() / 100, getHeight() / 30);
@@ -106,13 +113,6 @@ public class frame extends JFrame implements ActionListener {
         add(fullscreenButton);
     }
 
-
-    public static void main(String[] args)
-    {
-        new frame(true);
-    }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exit)
@@ -120,16 +120,27 @@ public class frame extends JFrame implements ActionListener {
         else if (e.getSource() == fullscreenButton) {
             fullscreen = !fullscreen;
             dispose();
-            new frame(fullscreen);
+            if (fullscreen)
+                new Frame() { protected void removeLabels() {}};
+            else
+                new Frame(800, 600) { protected void removeLabels() {}};
         }
         else if (e.getSource() == play) {
             dispose();
-            new game(fullscreen, getWidth(), getHeight());
+            if (fullscreen)
+                new Options();
+            else
+                new Options(getWidth(), getHeight());
         }
         else if (e.getSource() == playCLI)
         {
             dispose();
         }
+    }
+
+    public static void main(String[] args)
+    {
+        new Frame(false, 800, 600) { protected void removeLabels() {}};
     }
 
 }

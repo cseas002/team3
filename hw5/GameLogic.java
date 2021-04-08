@@ -22,7 +22,7 @@ public class GameLogic {
      * The maximum length of a word is 32 for this implementation of GameLogic
      *
      * @param lexicon    The array containing all the words we can choose from.
-     * @param wordLength The length of the answer to the game.
+     * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
@@ -184,7 +184,7 @@ public class GameLogic {
         /**
          * Returns the String representation of the Word. Its the same string that was used to construct it.
          * <p>
-         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects, and the only time needed is at the end of the game if the player fails and we need to tell him which word we had in mind.<br>
+         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects, and the only time needed is at the end of the Game if the player fails and we need to tell him which word we had in mind.<br>
          * So there is no reason to store that value only to call it once.
          *
          * @return the String representation of the Word. Its the same string that was used to construct it.

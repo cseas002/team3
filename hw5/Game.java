@@ -8,41 +8,34 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
-public class game extends JFrame implements ActionListener {
+public class Game extends JFrame implements ActionListener {
     private JButton exit;
-    private JLabel[] lettersLabels;
+    private final JLabel[] lettersLabels;
     private final boolean fullscreen;
     private final JButton[] letters = new JButton[26];
     private final boolean[] notVisible = new boolean[26];
-    private final Hangman hangman;
+    private Hangman hangman;
     private int wrongChoose;
     private final char[] answer;
     private final boolean[] foundLetters;
-    private int length;
-    private int width, height;
+    private int difficulty;
 
-    public game(boolean fullscreen, int width, int height)
+    public Game(boolean fullscreen, int width, int height, int length, int difficulty) //true
     {
-        this.width = width;
-        this.height = height;
-        setSize(width, height);
-        /*
-        length = (int) (4 + Math.random() * 10);
+        this.difficulty = difficulty;
+        if (!fullscreen)
+            setSize(width, height);
+
         try {
             hangman = new Hangman(new File("words.txt"), length);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }//*/
-        hangman = new Hangman(new String[] {"Bob","dog","pub","pad","wog","pog","gog","org"});
+       // hangman = new Hangman(new String[] {"Bob","dog","pub","pad","wog","pog","gog","org"});
         this.fullscreen = fullscreen;
-     //   if (fullscreen) {
-     //       GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
-     //       exit_button();
-     //   }
 
-        length = 3;
+       // length = 3;
         foundLetters = new boolean[length];
         lettersLabels = new JLabel[length];
         answer = hangman.gameLogic.getAnswer();
@@ -50,7 +43,26 @@ public class game extends JFrame implements ActionListener {
         initialize();
 
         setVisible(true);
+    }
 
+    public Game (int width, int height, int length, int difficulty)
+    {
+        this(false, width, height, length, difficulty);
+    }
+
+    public Game (int width, int height, int difficulty) //random length must be true
+    {
+        this(width, height, (int) (4 + Math.random() * 10), difficulty);
+    }
+
+    public Game (int length, int difficulty) //fullscreen must be true
+    {
+        this(true, 0, 0, length, difficulty);
+    }
+
+    public Game (int difficulty)
+    {
+        this((int) (4 + Math.random() * 10), difficulty);
     }
 
     private void initialize()
@@ -58,31 +70,30 @@ public class game extends JFrame implements ActionListener {
         Background();
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-       // setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setResizable(true);
         getContentPane().setBackground(new Color(40, 106, 177));
-       // setLayout(null);
         initializeLetters();
+        createUnderscoresAndLetters();
+        checkDone();
 
+      //  if (!fullscreen)
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
-                setSize(getWidth(), getHeight());
-                removeLetters();
-                removeUnderscoresAndLetters();
-                createUnderscoresAndLetters();
-                initializeLetters();
+                 setSize(getWidth(), getHeight());
+                 removeLetters();
+                 removeUnderscoresAndLetters();
+                 createUnderscoresAndLetters();
+                 initializeLetters();
             }
         });
 
-
-        checkDone();
-
-        //adding buttons
+        //for fullscreen
         if (fullscreen) {
-            exit_button();
             GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
+            exit_button();
         }
-        createUnderscoresAndLetters();
+        else
+            setResizable(true);
+
     }
 
     private void createUnderscoresAndLetters() {
@@ -179,7 +190,7 @@ public class game extends JFrame implements ActionListener {
     private void exit_button()
     {
         exit = new JButton("X");
-        exit.setBounds(1850, 0, 70, 30);
+        exit.setBounds(getWidth() - getWidth() / 20, 0, 5 * getWidth() / 100, getHeight() / 30);
         exit.addActionListener(this);
         add(exit);
     }
@@ -195,7 +206,7 @@ public class game extends JFrame implements ActionListener {
                     notVisible[i] = true;
                     char character = letters[i].getText().charAt(0);
                     if (hangman.playerMove(character) == 0)
-                         wrongChoose ++;
+                         wrongChoose += difficulty;
 
                     //from this line
                     for (int j = 0; j < Integer.min(hangman.gameLogic.getAnswer().length, answer.length); j++)
@@ -219,9 +230,9 @@ public class game extends JFrame implements ActionListener {
     }
 
     private void checkLose() {
-        if (wrongChoose >= 6)
+       // if (wrongChoose >= 6)
             //class for losing
-            System.exit(0);
+          //  System.exit(0);
     }
 
     private void checkWin() {
@@ -235,15 +246,10 @@ public class game extends JFrame implements ActionListener {
         if (!done)
             return ;
 
-        //class for winning
-      //  revalidate();
-       // setVisible(true);
-       // long time = System.currentTimeMillis();
-       // while (System.currentTimeMillis() - time < 5000);
         System.exit(1);
     }
 
     public static void main(String[] args) {
-        new game(false, 800, 600);
+        new Game(1);
     }
 }
