@@ -19,7 +19,7 @@ public class Game extends JFrame implements ActionListener {
     private int wrongChoose;
     private final char[] answer;
     private final boolean[] foundLetters;
-    private int difficulty;
+    private final int difficulty;
 
     public Game(boolean fullscreen, int width, int height, int length, int difficulty) //true
     {
@@ -118,44 +118,31 @@ public class Game extends JFrame implements ActionListener {
         switch (wrongChoose) {
             case 0 -> setContentPane(new JLabel(new ImageIcon("Hang.jpg")));
             case 1 -> setContentPane(new JLabel(new ImageIcon("Hangman only head.jpg")));
-            case 2 -> setContentPane(new JLabel(new ImageIcon("Hangman no hands.jpg")));
-            case 3 -> setContentPane(new JLabel(new ImageIcon("Hangman no hand.jpg")));
-            case 4 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs.jpg")));
-            case 5 -> setContentPane(new JLabel(new ImageIcon("Hangman no leg.jpg")));
-            default -> setContentPane(new JLabel(new ImageIcon("Hangman dead.jpg")));
+            case 2 -> setContentPane(new JLabel(new ImageIcon("Hangman only head one eye.jpg")));
+            case 3 -> setContentPane(new JLabel(new ImageIcon("Hangman only head two eyes.jpg")));
+            case 4 -> setContentPane(new JLabel(new ImageIcon("Hangman only head two eyes nose.jpg")));
+            case 5 -> setContentPane(new JLabel(new ImageIcon("Hangman only head all face.jpg")));
+            case 6 -> setContentPane(new JLabel(new ImageIcon("Hangman no hands.jpg")));
+            case 7 -> setContentPane(new JLabel(new ImageIcon("Hangman no hand.jpg")));
+            case 8 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs.jpg")));
+            case 9 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs dollar.jpg")));
+            case 10 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 1.jpg")));
+            case 11 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 2.jpg")));
+            case 12 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 3.jpg")));
+            case 13 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 4.jpg")));
+            case 14 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 5.jpg")));
+            case 15 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 6.jpg")));
+            case 16 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 7.jpg")));
+            case 17 -> setContentPane(new JLabel(new ImageIcon("Hangman no legs 8.jpg")));
+            case 18 -> setContentPane(new JLabel(new ImageIcon("Hangman no leg 1.jpg")));
+            case 19 -> setContentPane(new JLabel(new ImageIcon("Hangman no leg 2.jpg")));
+            case 20 -> setContentPane(new JLabel(new ImageIcon("Hangman no leg 3.jpg")));
+            case 21 -> setContentPane(new JLabel(new ImageIcon("Hangman no leg 4.jpg")));
+            case 22 -> setContentPane(new JLabel(new ImageIcon("Hangman dead.jpg")));
+            case 23 -> setContentPane(new JLabel(new ImageIcon("Hangman dead 1.jpg")));
+            case 24 -> setContentPane(new JLabel(new ImageIcon("Hangman dead 2.jpg")));
+            default -> setContentPane(new JLabel(new ImageIcon("Hangman dead 3.jpg")));
         }
-
-        /*
-        switch (wrongChoose)
-        {
-            case 0:
-                setContentPane(new JLabel(new ImageIcon("Hang.jpg")));
-                break;
-
-            case 1:
-                setContentPane(new JLabel(new ImageIcon("Hangman only head.jpg")));
-                break;
-
-            case 2:
-                setContentPane(new JLabel(new ImageIcon("Hangman no hands.jpg")));
-                break;
-
-            case 3:
-                setContentPane(new JLabel(new ImageIcon("Hangman no hand.jpg")));
-                break;
-
-            case 4:
-                setContentPane(new JLabel(new ImageIcon("Hangman no legs.jpg")));
-                break;
-
-            case 5:
-                setContentPane(new JLabel(new ImageIcon("Hangman no leg.jpg")));
-                break;
-
-            default:
-                setContentPane(new JLabel(new ImageIcon("Hangman dead.jpg")));
-        }
-         */
         revalidate();
     }
 
