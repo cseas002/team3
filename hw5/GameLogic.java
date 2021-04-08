@@ -1,5 +1,3 @@
-package cseas002.team3.hw5;
-
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -132,7 +130,9 @@ public class GameLogic {
                 map.put(tmp, map.get(tmp) + 1);
             }
             //If temporary configuration is now more popular than previous best configuration, then tmp is the new best Configuration.
-            if (map.get(bestConfiguration) < map.get(tmp)) {
+            int comp=map.get(bestConfiguration)-map.get(tmp);
+            //In case of a tie we pick the configuration with the lowest number of bits, meaning hte one that has the least instances of the letter.
+            if (comp<0||(comp==0&&Integer.bitCount(tmp)<Integer.bitCount(bestConfiguration))) {
                 bestConfiguration = tmp;
             }
         }
@@ -231,3 +231,4 @@ public class GameLogic {
     //*/
 
 }
+
