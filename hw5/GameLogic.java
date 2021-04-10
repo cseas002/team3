@@ -25,9 +25,8 @@ public class GameLogic {
      * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
-        if (lexicon == null) ;
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
-        if (lexicon.length == 0) {
+        if (lexicon==null||lexicon.length == 0) {
             throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
         }
         answer = new char[wordLength];
@@ -41,6 +40,7 @@ public class GameLogic {
 
     //Discards all words with a different length from an array.
     private static String[] discardWordsOfDifferentLength(String[] arr, int length) {
+        if(arr==null) {return null;}
         int pop = 0;
         for (String s : arr) {
             if (s.length() == length) {
