@@ -87,19 +87,6 @@ public class Hangman {
         return gameLogic.playerMove(c);
     }
 
-    /*
-    public String getCurrentAnswerFramework()
-    {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
-        for (int i = 0; i < wordsInArray.length; i++)
-            if (wordsInArray[i].length() != 4)
-                wordsInArray[i] = "";
-
-        gameLogic.printallwords();
-        return gameLogic.getCurrentAnswerFramework();
-    }//*/
-
     public String getFinalWord()
     {
         return gameLogic.getFinalWord();
