@@ -25,8 +25,9 @@ public class GameLogic {
      * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
+        if (lexicon == null) ;
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
-        if (lexicon == null || lexicon.length == 0) {
+        if (lexicon.length == 0) {
             throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
         }
         answer = new char[wordLength];
@@ -198,7 +199,7 @@ public class GameLogic {
                 size += addCharToCharArray(bigans, (char) (i + 'a'), letterConfig[i]);
             }
             char[] ans = new char[size];
-            if (size >= 0) System.arraycopy(bigans, 0, ans, 0, size);
+            System.arraycopy(bigans, 0, ans, 0, size);
             return new String(ans);
         }
     }
