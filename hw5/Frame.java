@@ -4,16 +4,11 @@ package cseas002.team3.hw5;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 
 public abstract class Frame extends JFrame implements ActionListener {
-
-    public boolean isFullscreen() {
-        return fullscreen;
-    }
-
-    public ImageIcon getIcon() {
-        return icon;
-    }
 
     private JButton exit;
     private JButton fullscreenButton;
@@ -135,8 +130,24 @@ public abstract class Frame extends JFrame implements ActionListener {
         else if (e.getSource() == playCLI)
         {
             dispose();
+            int length = GraphicsLessGame.chooseLength();
+            int lives = GraphicsLessGame.chooseLives();
+            try {
+                new GraphicsLessGame(new Hangman(new File(Hangman.filename), length).toArray(), length, lives);
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
         }
     }
+
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    public ImageIcon getIcon() {
+        return icon;
+    }
+
 
     public static void main(String[] args)
     {

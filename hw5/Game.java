@@ -9,26 +9,27 @@ import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class Game extends JFrame implements ActionListener {
+public class Game extends JFrame implements ActionListener{
     private JButton exit;
     private final JLabel[] lettersLabels;
     private final boolean fullscreen;
     private final JButton[] letters = new JButton[26];
     private final boolean[] notVisible = new boolean[26];
     private Hangman hangman;
-    private int wrongChoose;
     private final char[] answer;
     private final boolean[] foundLetters;
-    private final int difficulty;
+    private int lives;
+    private final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    private boolean end;
 
-    public Game(boolean fullscreen, int width, int height, int length, int difficulty) //true
+    public Game(boolean fullscreen, int width, int height, int length, int lives) //true
     {
-        this.difficulty = difficulty;
+        this.lives = lives;
         if (!fullscreen)
             setSize(width, height);
 
         try {
-            hangman = new Hangman(new File("words.txt"), length);
+            hangman = new Hangman(new File(Hangman.filename), length);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }//*/
@@ -45,24 +46,24 @@ public class Game extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    public Game (int width, int height, int length, int difficulty)
+    public Game (int width, int height, int length, int lives)
     {
-        this(false, width, height, length, difficulty);
+        this(false, width, height, length, lives);
     }
 
-    public Game (int width, int height, int difficulty) //random length must be true
+    public Game (int width, int height, int lives) //random length must be true
     {
-        this(width, height, (int) (4 + Math.random() * 10), difficulty);
+        this(width, height, (int) (4 + Math.random() * 10), lives);
     }
 
-    public Game (int length, int difficulty) //fullscreen must be true
+    public Game (int length, int lives) //fullscreen must be true
     {
-        this(true, 0, 0, length, difficulty);
+        this(true, 0, 0, length, lives);
     }
 
-    public Game (int difficulty)
+    public Game (int lives)
     {
-        this((int) (4 + Math.random() * 10), difficulty);
+        this((int) (4 + Math.random() * 10), lives);
     }
 
     private void initialize()
@@ -73,7 +74,6 @@ public class Game extends JFrame implements ActionListener {
         getContentPane().setBackground(new Color(40, 106, 177));
         initializeLetters();
         createUnderscoresAndLetters();
-        checkDone();
 
       //  if (!fullscreen)
         addComponentListener(new ComponentAdapter() {
@@ -94,6 +94,8 @@ public class Game extends JFrame implements ActionListener {
         else
             setResizable(true);
 
+        checkDone();
+
     }
 
     private void createUnderscoresAndLetters() {
@@ -102,7 +104,7 @@ public class Game extends JFrame implements ActionListener {
             lettersLabels[i] = foundLetters[i] ? new JLabel(Character.toString(answer[i])) : new JLabel("_");
             add(lettersLabels[i]);
             lettersLabels[i].setFont((new Font("Test", Font.PLAIN, getWidth() / 32)));
-            lettersLabels[i].setBounds(getWidth() / 2 + i * getWidth() / 40, getHeight() / 10, getWidth() / 2, getHeight());
+            lettersLabels[i].setBounds(getWidth() - getWidth() / 3 + i * getWidth() / 40, getHeight() / 15, getWidth() / 2, getHeight());
             revalidate();
             lettersLabels[i].setVisible(true);
         }
@@ -115,34 +117,9 @@ public class Game extends JFrame implements ActionListener {
     }
 
     private void Background() {
-        switch (wrongChoose) {
-            case 0 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hang.jpg")));
-            case 1 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman only head.jpg")));
-            case 2 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman only head one eye.jpg")));
-            case 3 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman only head two eyes.jpg")));
-            case 4 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman only head two eyes nose.jpg")));
-            case 5 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman only head all face.jpg")));
-            case 6 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no hands.jpg")));
-            case 7 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no hand.jpg")));
-            case 8 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs.jpg")));
-            case 9 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs dollar.jpg")));
-            case 10 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 1.jpg")));
-            case 11 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 2.jpg")));
-            case 12 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 3.jpg")));
-            case 13 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 4.jpg")));
-            case 14 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 5.jpg")));
-            case 15 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 6.jpg")));
-            case 16 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 7.jpg")));
-            case 17 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no legs 8.jpg")));
-            case 18 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no leg 1.jpg")));
-            case 19 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no leg 2.jpg")));
-            case 20 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no leg 3.jpg")));
-            case 21 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman no leg 4.jpg")));
-            case 22 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman dead.jpg")));
-            case 23 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman dead 1.jpg")));
-            case 24 -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman dead 2.jpg")));
-            default -> setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman dead 3.jpg")));
-        }
+        String name = "Hangman Pirate Pictures\\" + lives + ".png";
+        ImageIcon backgroundIcon = new ImageIcon(name);
+        resize(backgroundIcon);
         revalidate();
     }
 
@@ -184,6 +161,11 @@ public class Game extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (end)
+            System.exit(1);
+
+
+
         if (e.getSource() == exit)
             System. exit(0);
         else
@@ -193,7 +175,7 @@ public class Game extends JFrame implements ActionListener {
                     notVisible[i] = true;
                     char character = letters[i].getText().charAt(0);
                     if (hangman.playerMove(character) == 0)
-                         wrongChoose += difficulty;
+                         lives --;
 
                     //from this line
                     for (int j = 0; j < Integer.min(hangman.gameLogic.getAnswer().length, answer.length); j++)
@@ -203,11 +185,7 @@ public class Game extends JFrame implements ActionListener {
                         }
 
                     //to this line is just for testing
-
-
                     initialize();
-
-                    //letters[i].setVisible(false);
                 }
     }
 
@@ -217,9 +195,8 @@ public class Game extends JFrame implements ActionListener {
     }
 
     private void checkLose() {
-       // if (wrongChoose >= 6)
-            //class for losing
-          //  System.exit(0);
+        if (lives == 0)
+            end = true;
     }
 
     private void checkWin() {
@@ -233,10 +210,26 @@ public class Game extends JFrame implements ActionListener {
         if (!done)
             return ;
 
-        System.exit(1);
+        lives = 100;
+        end = true;
+        notify();
     }
+
+    private void resize(ImageIcon icon)
+    {
+        Image image = icon.getImage(); // transform it
+        Image newImage;
+        if (!fullscreen)
+            newImage = image.getScaledInstance(getWidth(), getHeight(),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        else
+            newImage = image.getScaledInstance(size.width, size.height,  java.awt.Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImage);  // transform it back
+        setContentPane(new JLabel(icon));
+    }
+
 
     public static void main(String[] args) {
         new Game(1);
     }
+
 }

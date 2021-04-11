@@ -25,11 +25,11 @@ public class GameLogic {
      * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
-        if(wordLength>32) {
-    		throw new IllegalArgumentException("Current implementation of GameLogic does not support words longer than 32 characters");
-    	}
+        if (wordLength > 32) {
+            throw new IllegalArgumentException("Current implementation of GameLogic does not support words longer than 32 characters");
+        }
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
-        if (lexicon==null||lexicon.length == 0) {
+        if (lexicon == null || lexicon.length == 0) {
             throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
         }
         answer = new char[wordLength];
@@ -43,7 +43,9 @@ public class GameLogic {
 
     //Discards all words with a different length from an array.
     private static String[] discardWordsOfDifferentLength(String[] arr, int length) {
-        if(arr==null) {return null;}
+        if (arr == null) {
+            return null;
+        }
         int pop = 0;
         for (String s : arr) {
             if (s.length() == length) {
@@ -104,7 +106,8 @@ public class GameLogic {
     }
 
     /**
-     * Returns how many times the character C occurs in the most popular configuration of that character in the lexicon. And removes all the words not of that configuration from the GameLogic.
+     * Returns how many times the character C occurs in the most popular configuration of that character in the lexicon.
+     * And removes all the words not of that configuration from the GameLogic.
      *
      * @param c The character the player chose as a guess.
      * @return How many times C occurs in the word the GameLogic has in mind (or words because GameLogic cheats)
@@ -118,7 +121,7 @@ public class GameLogic {
     private int query(char c) {
         int letter = alphabetOrder(c);
 
-        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         //This map will take a configuration as a key and associate it with an integer representing how many times we have this configuration in our array of words.
         int bestConfiguration = 0;
         map.put(0, 0);
@@ -136,9 +139,9 @@ public class GameLogic {
                 map.put(tmp, map.get(tmp) + 1);
             }
             //If temporary configuration is now more popular than previous best configuration, then tmp is the new best Configuration.
-            int comp=map.get(bestConfiguration)-map.get(tmp);
+            int comp = map.get(bestConfiguration) - map.get(tmp);
             //In case of a tie we pick the configuration with the lowest number of bits, meaning hte one that has the least instances of the letter.
-            if (comp<0||(comp==0&&Integer.bitCount(tmp)<Integer.bitCount(bestConfiguration))) {
+            if (comp < 0 || (comp == 0 && Integer.bitCount(tmp) < Integer.bitCount(bestConfiguration))) {
                 bestConfiguration = tmp;
             }
         }
@@ -175,7 +178,7 @@ public class GameLogic {
         return answer;
     }
 
-    private class Word {
+    private static class Word {
         //private String s;
         private final int[] letterConfig;
 
@@ -190,7 +193,8 @@ public class GameLogic {
         /**
          * Returns the String representation of the Word. Its the same string that was used to construct it.
          * <p>
-         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects, and the only time needed is at the end of the Game if the player fails and we need to tell him which word we had in mind.<br>
+         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects,
+         * and the only time needed is at the end of the Game if the player fails and we need to tell him which word we had in mind.<br>
          * So there is no reason to store that value only to call it once.
          *
          * @return the String representation of the Word. Its the same string that was used to construct it.

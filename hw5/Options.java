@@ -123,13 +123,13 @@ public class Options extends Frame implements ActionListener, KeyListener {
     private int calculateDifficulty(Object difficulty)
     {
         if (difficulty == easy)
-            return 1;
+            return 23;
         if (difficulty == normal)
-            return 2;
+            return 20;
         if (difficulty == hard)
-            return 3;
+            return 10;
         if (difficulty == impossible)
-            return 4;
+            return 6;
 
         return -1;
     }

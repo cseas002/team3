@@ -7,10 +7,8 @@ import java.util.Scanner;
 
 public class Hangman {
     private ArrayList <String> words = new ArrayList<>();
-    private String[] wordsInArray;
-    private boolean GUI;
-    private int length;
     public GameLogic gameLogic;
+    public static String filename;
 
     /**
      * Constructor with given ArrayList of Strings
@@ -28,9 +26,6 @@ public class Hangman {
      */
     public Hangman(String[] wordsInArray)
     {
-      //  this.wordsInArray = new String[wordsInArray.length];
-      //  System.arraycopy(wordsInArray, 0, this.wordsInArray, 0, wordsInArray.length);
-       // length = 3;
         gameLogic = new GameLogic(wordsInArray, 3);
     }
 
@@ -53,8 +48,6 @@ public class Hangman {
         if (length == 0)
             length = (int) (4 + Math.random() * 10);
 
-        this.length = length;
-
         Scanner scan = new Scanner(file);
         while (scan.hasNext())
         {
@@ -76,10 +69,9 @@ public class Hangman {
         gameLogic = new GameLogic(toArray(), length);
     }
 
-    private String[] toArray()
+    public String[] toArray()
     {
-        wordsInArray = words.toString().split("\\W+");
-        return wordsInArray;
+        return words.toString().split("\\W+");
     }
 
     public int playerMove(char c)
