@@ -25,6 +25,9 @@ public class GameLogic {
      * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
+        if(wordLength>32) {
+    		throw new IllegalArgumentException("Current implementation of GameLogic does not support words longer than 32 characters");
+    	}
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
         if (lexicon==null||lexicon.length == 0) {
             throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
