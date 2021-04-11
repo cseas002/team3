@@ -19,9 +19,10 @@ public abstract class Frame extends JFrame implements ActionListener {
     public Frame(boolean fullscreen, int width, int height)
     {
         this.fullscreen = fullscreen;
-        setContentPane(new JLabel(new ImageIcon("Hangman Pictures\\Hangman.jpg"))); //background
         if (!fullscreen)
         setSize(width, height);
+        Background();
+        setResizable(true);
         initialize();
         setVisible(true);
     }
@@ -36,18 +37,18 @@ public abstract class Frame extends JFrame implements ActionListener {
         this(true, 0, 0);
     }
 
+    private void Background()
+    {
+        ImageIcon backgroundIcon = new ImageIcon("Hangman Pictures\\Hangman.jpg");
+        backgroundIcon = resize(backgroundIcon);
+        setContentPane(new JLabel(backgroundIcon));
+    }
+
     protected void initialize()
     {
         setTitle("Hangman");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(true);
         setIconImage(icon.getImage());
-
-        //adding buttons
-        if (fullscreen) {
-            GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
-            exit_button();
-        }
 
         addButtons();
         addComponentListener(new ComponentAdapter() {
@@ -58,6 +59,12 @@ public abstract class Frame extends JFrame implements ActionListener {
                 removeLabels();
             }
         });
+
+        if (fullscreen) {
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
+            exit_button();
+        }
+
     }
 
     protected abstract void removeLabels();
@@ -145,6 +152,19 @@ public abstract class Frame extends JFrame implements ActionListener {
     }
 
     public ImageIcon getIcon() {
+        return icon;
+    }
+
+    private ImageIcon resize(ImageIcon icon)
+    {
+        Image image = icon.getImage(); // transform it
+        Image newImage;
+        if (!isFullscreen())
+            newImage = image.getScaledInstance(getWidth(), getHeight(),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        else
+            newImage = image.getScaledInstance(Hangman.size.width, Hangman.size.height,  java.awt.Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImage);  // transform it back
+
         return icon;
     }
 

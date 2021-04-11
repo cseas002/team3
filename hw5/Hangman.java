@@ -1,5 +1,6 @@
 package cseas002.team3.hw5;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ public class Hangman {
     private ArrayList <String> words = new ArrayList<>();
     public GameLogic gameLogic;
     public static String filename;
+    public static final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
     /**
      * Constructor with given ArrayList of Strings

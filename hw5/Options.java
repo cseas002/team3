@@ -38,6 +38,7 @@ public class Options extends Frame implements ActionListener, KeyListener {
     protected void initialize()
     {
         super.initialize();
+        setResizable(false);
         addKeyListener(this);
         addLengthLabel();
     }

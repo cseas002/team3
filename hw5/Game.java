@@ -19,7 +19,6 @@ public class Game extends JFrame implements ActionListener{
     private final char[] answer;
     private final boolean[] foundLetters;
     private int lives;
-    private final Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
     private boolean end;
 
     public Game(boolean fullscreen, int width, int height, int length, int lives) //true
@@ -75,10 +74,10 @@ public class Game extends JFrame implements ActionListener{
         initializeLetters();
         createUnderscoresAndLetters();
 
-      //  if (!fullscreen)
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                  setSize(getWidth(), getHeight());
+                 Background();
                  removeLetters();
                  removeUnderscoresAndLetters();
                  createUnderscoresAndLetters();
@@ -94,6 +93,7 @@ public class Game extends JFrame implements ActionListener{
         else
             setResizable(true);
 
+        if (!end)
         checkDone();
 
     }
@@ -108,6 +108,7 @@ public class Game extends JFrame implements ActionListener{
             revalidate();
             lettersLabels[i].setVisible(true);
         }
+
     }
 
     private void removeUnderscoresAndLetters()
@@ -119,7 +120,8 @@ public class Game extends JFrame implements ActionListener{
     private void Background() {
         String name = "Hangman Pirate Pictures\\" + lives + ".png";
         ImageIcon backgroundIcon = new ImageIcon(name);
-        resize(backgroundIcon);
+        backgroundIcon = resize(backgroundIcon);
+        setContentPane(new JLabel(backgroundIcon));
         revalidate();
     }
 
@@ -163,8 +165,6 @@ public class Game extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if (end)
             System.exit(1);
-
-
 
         if (e.getSource() == exit)
             System. exit(0);
@@ -212,19 +212,20 @@ public class Game extends JFrame implements ActionListener{
 
         lives = 100;
         end = true;
-        notify();
+        initialize();
     }
 
-    private void resize(ImageIcon icon)
+    private ImageIcon resize(ImageIcon icon)
     {
         Image image = icon.getImage(); // transform it
         Image newImage;
         if (!fullscreen)
             newImage = image.getScaledInstance(getWidth(), getHeight(),  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         else
-            newImage = image.getScaledInstance(size.width, size.height,  java.awt.Image.SCALE_SMOOTH);
+            newImage = image.getScaledInstance(Hangman.size.width, Hangman.size.height,  java.awt.Image.SCALE_SMOOTH);
         icon = new ImageIcon(newImage);  // transform it back
-        setContentPane(new JLabel(icon));
+
+        return icon;
     }
 
 
