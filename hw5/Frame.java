@@ -14,7 +14,7 @@ public abstract class Frame extends JFrame implements ActionListener {
     private JButton fullscreenButton;
     private JButton play, playCLI;
     private boolean fullscreen;
-    public ImageIcon icon = new ImageIcon("Hangman Pictures\\Hangman.jpg");
+    public ImageIcon icon = new ImageIcon("Hangman.jpg");
 
     public Frame(boolean fullscreen, int width, int height)
     {
@@ -39,7 +39,7 @@ public abstract class Frame extends JFrame implements ActionListener {
 
     private void Background()
     {
-        ImageIcon backgroundIcon = new ImageIcon("Hangman Pictures\\Hangman.jpg");
+        ImageIcon backgroundIcon = new ImageIcon("Hangman.jpg");
         backgroundIcon = resize(backgroundIcon);
         setContentPane(new JLabel(backgroundIcon));
     }
