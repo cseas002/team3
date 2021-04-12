@@ -195,8 +195,10 @@ public class Game extends JFrame implements ActionListener{
         if (end)
             System.exit(1);
 
-        if (e.getSource() == exit)
-            System. exit(0);
+        if (e.getSource() == exit) {
+            dispose();
+            System.exit(0);
+        }
         else
             for (int i = 0; i < letters.length; i++)
                 if (e.getSource() == letters[i])
