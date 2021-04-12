@@ -14,6 +14,7 @@ public class Game extends JFrame implements ActionListener{
     private final JLabel[] lettersLabels;
     private final boolean fullscreen;
     private final JButton[] letters = new JButton[26];
+    private final JLabel[] hearts = new JLabel[24];
     private final boolean[] notVisible = new boolean[26];
     private Hangman hangman;
     private final char[] answer;
@@ -65,6 +66,20 @@ public class Game extends JFrame implements ActionListener{
         this((int) (4 + Math.random() * 10), lives);
     }
 
+    private void initializeLives()
+    {
+        ImageIcon heart = new ImageIcon("Hangman Pirate pictures\\heart.png");
+        heart = resizeHeart(heart);
+        for (int i = 0; i < lives; i++) {
+            hearts[i] = new JLabel(heart);
+            add(hearts[i]);
+            hearts[i].setVisible(true);
+            hearts[i].setBounds(getWidth() / 5 + (i % 6) * getWidth() / 20, getHeight() / 700, getWidth() / 10, (i / 6 + 1) * getHeight() / 10);
+
+        }
+
+    }
+
     private void initialize()
     {
         Background();
@@ -73,6 +88,8 @@ public class Game extends JFrame implements ActionListener{
         getContentPane().setBackground(new Color(40, 106, 177));
         initializeLetters();
         createUnderscoresAndLetters();
+        if (!end)
+        initializeLives();
 
         addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
@@ -81,6 +98,8 @@ public class Game extends JFrame implements ActionListener{
                  removeLetters();
                  removeUnderscoresAndLetters();
                  createUnderscoresAndLetters();
+                 if (!end)
+                 initializeLives();
                  initializeLetters();
             }
         });
@@ -118,10 +137,20 @@ public class Game extends JFrame implements ActionListener{
     }
 
     private void Background() {
-        String name = "Hangman Pirate Pictures\\" + lives + ".png";
-        ImageIcon backgroundIcon = new ImageIcon(name);
+        ImageIcon backgroundIcon;
+        if (!end)
+        backgroundIcon = new ImageIcon("Hangman Pirate Pictures\\default.png");
+        else if (lives == 0)
+            backgroundIcon = new ImageIcon("Hangman Pirate Pictures\\lose.png");
+        else
+            backgroundIcon = new ImageIcon("Hangman Pirate Pictures\\win.png");
+
         backgroundIcon = resize(backgroundIcon);
         setContentPane(new JLabel(backgroundIcon));
+
+        if (fullscreen)
+            exit_button();
+
         revalidate();
     }
 
@@ -175,7 +204,8 @@ public class Game extends JFrame implements ActionListener{
                     notVisible[i] = true;
                     char character = letters[i].getText().charAt(0);
                     if (hangman.playerMove(character) == 0)
-                         lives --;
+                        remove(hearts[--lives]); //remove last heart and make lives = lives - 1
+
 
                     //from this line
                     for (int j = 0; j < Integer.min(hangman.gameLogic.getAnswer().length, answer.length); j++)
@@ -195,8 +225,10 @@ public class Game extends JFrame implements ActionListener{
     }
 
     private void checkLose() {
-        if (lives == 0)
+        if (lives == 0) {
             end = true;
+            initialize();
+        }
     }
 
     private void checkWin() {
@@ -210,9 +242,22 @@ public class Game extends JFrame implements ActionListener{
         if (!done)
             return ;
 
-        lives = 100;
+       // lives = 100;
         end = true;
         initialize();
+    }
+
+    private ImageIcon resizeHeart(ImageIcon icon)
+    {
+        Image image = icon.getImage(); // transform it
+        Image newImage;
+        if (!fullscreen)
+            newImage = image.getScaledInstance(getWidth() / 25, getHeight() / 20,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        else
+            newImage = image.getScaledInstance(Hangman.size.width / 20, Hangman.size.height / 20,  java.awt.Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImage);  // transform it back
+
+        return icon;
     }
 
     private ImageIcon resize(ImageIcon icon)
