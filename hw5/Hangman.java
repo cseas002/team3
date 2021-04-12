@@ -67,7 +67,6 @@ public class Hangman {
                 words.add(word);
         }
 
-       // words.removeIf(word -> word.length() != this.length); //removes all the words who have different lengths
         gameLogic = new GameLogic(toArray(), length);
     }
 

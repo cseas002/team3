@@ -2,39 +2,9 @@ package cseas002.team3.hw5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainClass {
-	//I commented it because I used the fixed one in hangman
-
-
-	/*
-    private static String[] readFromFile(String filename) {
-        try {
-            File input = new File(filename);
-            Scanner scam = new Scanner(input);
-            ArrayList<String> tmp = new ArrayList<String>();
-            while (scam.hasNext()) {
-                tmp.add(scam.next());/*
-				String tmp=scam.next();
-				System.out.println(tmp);
-				ans.add(tmp);//
-            }
-            scam.close();
-            //I wanted to use ArrayList.toArray() but it did not work at all
-            String[] ans = new String[tmp.size()];
-            for (int i = 0; i < tmp.size(); ++i) {
-                ans[i] = tmp.get(i);
-            }
-            return ans;
-        } catch (Exception e) {
-            System.out.printf("An error has occured while trying to read words from your file\n");
-            e.printStackTrace();
-        }
-        //System.out.println("bug");
-        return null;
-    } //*/
 
     public static void main(String[] args) {
         //String fileName="dictionary.txt"; int answerLength=9; int amountOfTries=30;/*

@@ -161,6 +161,8 @@ public class Game extends JFrame implements ActionListener{
             char letter = (char) (i + 'A');
             letters[i] = new JButton(Character.toString(letter));
             letters[i].setBounds(getWidth() / 20 + i * getWidth() / 15, getHeight() * 75 / 100, getHeight() / 13, getHeight() / 13);
+            letters[i].setForeground(new Color(4, 100, 113));
+            letters[i].setBackground(Color.CYAN);
             letters[i].addActionListener(this);
             add(letters[i]);
         }
@@ -171,6 +173,8 @@ public class Game extends JFrame implements ActionListener{
             char letter = (char) (i + 'A');
             letters[i] = new JButton(Character.toString(letter));
             letters[i].setBounds(getWidth() / 20 + (i - 13) * getWidth() / 15, getHeight() * 85 / 100, getHeight() / 13, getHeight() / 13);
+            letters[i].setForeground(Color.CYAN);
+            letters[i].setBackground(new Color(4, 100, 113));
             letters[i].addActionListener(this);
             add(letters[i]);
         }
@@ -186,6 +190,7 @@ public class Game extends JFrame implements ActionListener{
     {
         exit = new JButton("X");
         exit.setBounds(getWidth() - getWidth() / 20, 0, 5 * getWidth() / 100, getHeight() / 30);
+        exit.setBackground(Color.CYAN);
         exit.addActionListener(this);
         add(exit);
     }
@@ -277,6 +282,7 @@ public class Game extends JFrame implements ActionListener{
 
 
     public static void main(String[] args) {
+        Hangman.filename = "words.txt";
         new Game(1);
     }
 
