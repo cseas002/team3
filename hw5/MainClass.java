@@ -25,7 +25,7 @@ public class MainClass {
 			}
 		} while (!valid);
 
-        if (console.equals("yes")) {
+        if (console.equals("yes") || console.equals("Yes") || console.equals("YES")) {
             Hangman.filename = fileName;
             new Frame(false, 800, 600) {
                 protected void removeLabels() {

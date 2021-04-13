@@ -4,8 +4,6 @@ package cseas002.team3.hw5;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 
 
 public abstract class Frame extends JFrame implements ActionListener {
@@ -72,7 +70,7 @@ public abstract class Frame extends JFrame implements ActionListener {
     protected void removeButtons()
     {
         remove(play);
-        remove(playCLI);
+       // remove(playCLI);
         remove(fullscreenButton);
     }
 
@@ -80,7 +78,7 @@ public abstract class Frame extends JFrame implements ActionListener {
     protected void addButtons() {
         fullscreen_button();
         play_button();
-        play_CLI_button();
+       // play_CLI_button();
     }
 
     private void play_button()
@@ -92,12 +90,13 @@ public abstract class Frame extends JFrame implements ActionListener {
         add(play);
     }
 
+    /*
     private void play_CLI_button() {
         playCLI = new JButton("Play Hangman without graphics!");
         playCLI.setBounds(getWidth() * 1100 / 1920,getHeight() / 3,getWidth() / 6,getHeight() / 10);
         playCLI.addActionListener(this);
         add(playCLI);
-    }
+    }//*/
 
     protected void exit_button()
     {
@@ -134,7 +133,7 @@ public abstract class Frame extends JFrame implements ActionListener {
             else
                 new Options(getWidth(), getHeight());
         }
-        else if (e.getSource() == playCLI)
+      /*  else if (e.getSource() == playCLI)
         {
             dispose();
             int length = GraphicsLessGame.chooseLength();
@@ -144,7 +143,7 @@ public abstract class Frame extends JFrame implements ActionListener {
             } catch (FileNotFoundException fileNotFoundException) {
                 fileNotFoundException.printStackTrace();
             }
-        }
+        } //*/
     }
 
     public boolean isFullscreen() {

@@ -21,11 +21,13 @@ public class GraphicsLessGame {
         play();
     }
 
+    /*
     public static int chooseLength()
     {
         Scanner scan = new Scanner(System.in);
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
         while (true) {
-            System.out.println("Choose your length (0 - 15, type 0 for random length): ");
+            System.out.print("Choose your length (0 - 15, type 0 for random length): ");
             String input = scan.next();
             try {
                 int length = Integer.parseInt(input);
@@ -59,7 +61,7 @@ public class GraphicsLessGame {
                 System.out.println("Input is not an int value");
             }
         }
-    }
+    }//*/
 
     private void play() {
         Scanner scam = new Scanner(System.in);
