@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 /**
  * @author Christoforos Seas 1028675
+ * Class for handling the game
  */
 public class Hangman {
     private ArrayList <String> words = new ArrayList<>();
