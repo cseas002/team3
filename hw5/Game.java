@@ -8,7 +8,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
+/**
+ * Class which controls the game's main frame
+ * @author Christoforos Seas 1028675
+ */
 public class Game extends JFrame implements ActionListener{
     private JButton exit;
     private final JLabel[] lettersLabels;
@@ -22,9 +27,19 @@ public class Game extends JFrame implements ActionListener{
     private int lives;
     private boolean end;
 
-    public Game(boolean fullscreen, int width, int height, int length, int lives) //true
+    /**
+     * Constructor used by all the other constructors
+     * Creates the game based on the player's chosen options
+     * @param fullscreen if it's fullscreen or not
+     * @param width width of the frame
+     * @param height height of the frame
+     * @param length length of the word
+     * @param lives lives the player will have
+     */
+    public Game(boolean fullscreen, int width, int height, int length, int lives)
     {
         this.lives = lives;
+        this.fullscreen = fullscreen;
         if (!fullscreen)
             setSize(width, height);
 
@@ -32,40 +47,61 @@ public class Game extends JFrame implements ActionListener{
             hangman = new Hangman(new File(Hangman.filename), length);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }//*/
-       // hangman = new Hangman(new String[] {"Bob","dog","pub","pad","wog","pog","gog","org"});
-        this.fullscreen = fullscreen;
-
-       // length = 3;
+        }
         foundLetters = new boolean[length];
         lettersLabels = new JLabel[length];
         answer = hangman.gameLogic.getAnswer();
 
         initialize();
-
         setVisible(true);
     }
 
+    /**
+     * Constructor when fullscreen is false and given lives and length
+     * @param width width of the frame
+     * @param height height of the frame
+     * @param length length of the word
+     * @param lives lives the player will have
+     */
     public Game (int width, int height, int length, int lives)
     {
         this(false, width, height, length, lives);
     }
 
-    public Game (int width, int height, int lives) //random length must be true
+    /**
+     * Constructor when fullscreen is false and given lives and random length
+     * @param width width of the frame
+     * @param height height of the frame
+     * @param lives lives the player will have
+     */
+    public Game (int width, int height, int lives)
     {
         this(width, height, (int) (4 + Math.random() * 10), lives);
     }
 
+    /**
+     * Constructor when fullscreen is true and given lives and given length
+     * @param length length of the word
+     * @param lives lives the player will have
+     */
     public Game (int length, int lives) //fullscreen must be true
     {
         this(true, 0, 0, length, lives);
     }
 
+    /**
+     * Constructor when fullscreen is true and given lives and random length
+     * @param lives lives the player will have
+     */
     public Game (int lives)
     {
         this((int) (4 + Math.random() * 10), lives);
     }
 
+    /**
+     * Method which initializes lives
+     * Lives are basically heart pictures which are added depending on the player's lives
+     */
     private void initializeLives()
     {
         ImageIcon heart = new ImageIcon("Hangman Pirate pictures\\heart.png");
@@ -80,11 +116,15 @@ public class Game extends JFrame implements ActionListener{
 
     }
 
+    /**
+     * Initializer Method to initialize the game
+     */
     private void initialize()
     {
         Background();
         setTitle("Hangman");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setIconImage(Frame.ICON.getImage());
         getContentPane().setBackground(new Color(40, 106, 177));
         initializeLetters();
         createUnderscoresAndLetters();
@@ -107,16 +147,18 @@ public class Game extends JFrame implements ActionListener{
         //for fullscreen
         if (fullscreen) {
             GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].setFullScreenWindow(this);
-            exit_button();
+            exitButton();
         }
         else
             setResizable(true);
 
         if (!end)
         checkDone();
-
     }
 
+    /**
+     * Creating underscores and letters
+     */
     private void createUnderscoresAndLetters() {
         for (int i = 0; i < foundLetters.length; i++) {
             //if the letter is found it will print the letter, otherwise underscore
@@ -127,15 +169,23 @@ public class Game extends JFrame implements ActionListener{
             revalidate();
             lettersLabels[i].setVisible(true);
         }
-
     }
 
+    /**
+     * Removes underscores and letters
+     */
     private void removeUnderscoresAndLetters()
     {
         for (JLabel letter : lettersLabels)
             remove(letter);
     }
 
+    /**
+     * Method which creates the background based on current state of the game.
+     * If the player won, the shark will eat the pirate and if the player lost,
+     * the shark will eat the player.
+     * Otherwise, default background is shown
+     */
     private void Background() {
         ImageIcon backgroundIcon;
         if (!end)
@@ -149,11 +199,15 @@ public class Game extends JFrame implements ActionListener{
         setContentPane(new JLabel(backgroundIcon));
 
         if (fullscreen)
-            exit_button();
+            exitButton();
 
         revalidate();
     }
 
+    /**
+     * Method which initializes letters' buttons
+     * Chooses which are shown and not, sets the background color, foreground color, position, size, etc.
+     */
     private void initializeLetters() {
         for (int i = 0; i < 13; i++) {
             if (notVisible[i])
@@ -180,13 +234,19 @@ public class Game extends JFrame implements ActionListener{
         }
     }
 
+    /**
+     * Method which removes the letters' buttons
+     */
     private void removeLetters()
     {
         for (JButton letter : letters)
             remove(letter);
     }
 
-    private void exit_button()
+    /**
+     * Method for exit button
+     */
+    private void exitButton()
     {
         exit = new JButton("X");
         exit.setBounds(getWidth() - getWidth() / 20, 0, 5 * getWidth() / 100, getHeight() / 30);
@@ -195,10 +255,16 @@ public class Game extends JFrame implements ActionListener{
         add(exit);
     }
 
+    /**
+     * overriding {@link ActionListener}'s actionPerformed {@link ActionListener#actionPerformed(ActionEvent)} method
+     * @param e Action event which occured
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (end)
+        if (end) {
+            dispose();
             System.exit(1);
+        }
 
         if (e.getSource() == exit) {
             dispose();
@@ -206,31 +272,34 @@ public class Game extends JFrame implements ActionListener{
         }
         else
             for (int i = 0; i < letters.length; i++)
-                if (e.getSource() == letters[i])
+                if (e.getSource() == letters[i]) //if the player chooses a letter
                 {
-                    notVisible[i] = true;
+                    notVisible[i] = true; //it will not be visible
                     char character = letters[i].getText().charAt(0);
-                    if (hangman.playerMove(character) == 0)
+                    if (hangman.playerMove(character) == 0) //it will use the Hangman's class playerMove method which uses the GameLogic class
                         remove(hearts[--lives]); //remove last heart and make lives = lives - 1
 
-
-                    //from this line
-                    for (int j = 0; j < Integer.min(hangman.gameLogic.getAnswer().length, answer.length); j++)
-                        if (Character.isAlphabetic(hangman.gameLogic.getAnswer()[j])) {
+                    for (int j = 0; j < answer.length; j++)
+                        if (Character.isAlphabetic(hangman.gameLogic.getAnswer()[j]) && !foundLetters[j]) //if the player found a letter, it will be added to the answer
+                        {
                             answer[j] = hangman.gameLogic.getAnswer()[j];
                             foundLetters[j] = true;
                         }
-
-                    //to this line is just for testing
                     initialize();
                 }
     }
 
+    /**
+     * Method which checks whether the game is over
+     */
     private void checkDone() {
         checkWin();
         checkLose();
     }
 
+    /**
+     * Method which checks if the player lost
+     */
     private void checkLose() {
         if (lives == 0) {
             end = true;
@@ -238,22 +307,29 @@ public class Game extends JFrame implements ActionListener{
         }
     }
 
+    /**
+     * Method which checks if the player won
+     */
     private void checkWin() {
         boolean done = true;
         for (boolean word : foundLetters)
             if (!word) {
-                done = false;
+                done = false; //if even one word isn't found, that means the player didn't win
                 break;
             }
 
         if (!done)
             return ;
 
-       // lives = 100;
-        end = true;
+        end = true; //else, the player won
         initialize();
     }
 
+    /**
+     * Method which resizes heart's image dimensions depending on frame's size
+     * @param icon the heart icon
+     * @return resized heart
+     */
     private ImageIcon resizeHeart(ImageIcon icon)
     {
         Image image = icon.getImage(); // transform it
@@ -267,6 +343,11 @@ public class Game extends JFrame implements ActionListener{
         return icon;
     }
 
+    /**
+     * Method which resizes background's image dimensions depending on frame's size
+     * @param icon the background icon
+     * @return resized background
+     */
     private ImageIcon resize(ImageIcon icon)
     {
         Image image = icon.getImage(); // transform it
@@ -280,10 +361,13 @@ public class Game extends JFrame implements ActionListener{
         return icon;
     }
 
-
+    /**
+     * Main class just for testing.
+     * Creating a fullscreen game using words.txt file
+     * @param args args
+     */
     public static void main(String[] args) {
         Hangman.filename = "words.txt";
         new Game(1);
     }
-
 }

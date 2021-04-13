@@ -6,6 +6,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * @author Christoforos Seas 1028675
+ */
 public class Hangman {
     private ArrayList <String> words = new ArrayList<>();
     public GameLogic gameLogic;
@@ -66,29 +69,35 @@ public class Hangman {
             if (is_word)
                 words.add(word);
         }
-
         gameLogic = new GameLogic(toArray(), length);
     }
 
+    /**
+     * Method which returns the list to an array of Strings
+     * @return the String array
+     */
     public String[] toArray()
     {
         return words.toString().split("\\W+");
     }
 
+    /**
+     * Method which calculates the results for every player's move,
+     * using {@link GameLogic} class
+     * @param c the character the player chose
+     * @return how many letters he found
+     */
     public int playerMove(char c)
     {
         return gameLogic.playerMove(c);
     }
 
+    /**
+     * Method which returns the final word of the game
+     * @return final word
+     */
     public String getFinalWord()
     {
         return gameLogic.getFinalWord();
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-            Hangman test = new Hangman(new File("words.txt"), (int) (4 + Math.random() * 10));
-
-            for (String word : test.words)
-                System.out.println(word);
     }
 }
