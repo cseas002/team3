@@ -21,48 +21,6 @@ public class GraphicsLessGame {
         play();
     }
 
-    /*
-    public static int chooseLength()
-    {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
-        while (true) {
-            System.out.print("Choose your length (0 - 15, type 0 for random length): ");
-            String input = scan.next();
-            try {
-                int length = Integer.parseInt(input);
-
-                if (length == 0)
-                    return 1 + (int) (Math.random() * 15);
-                else if (length < 0 || length > 15)
-                    System.out.println("Wrong input");
-                else
-                    return length;
-            }catch(NumberFormatException e) {
-                System.out.println("Input is not an int value");
-            }
-        }
-    }
-
-    public static int chooseLives()
-    {
-        Scanner scan = new Scanner(System.in);
-        while (true) {
-            System.out.println("Choose how many lives you want to have (1 - 25): ");
-            String input = scan.next();
-            try {
-                int lives = Integer.parseInt(input);
-
-                if (lives < 1 || lives > 25)
-                    System.out.println("Wrong input");
-                else
-                    return lives;
-            }catch(NumberFormatException e) {
-                System.out.println("Input is not an int value");
-            }
-        }
-    }//*/
-
     private void play() {
         Scanner scam = new Scanner(System.in);
         while (this.isStillGoing) {

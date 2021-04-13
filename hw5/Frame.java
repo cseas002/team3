@@ -10,7 +10,7 @@ public abstract class Frame extends JFrame implements ActionListener {
 
     private JButton exit;
     private JButton fullscreenButton;
-    private JButton play, playCLI;
+    private JButton play;
     private boolean fullscreen;
     public ImageIcon icon = new ImageIcon("Hangman.jpg");
 
@@ -70,7 +70,6 @@ public abstract class Frame extends JFrame implements ActionListener {
     protected void removeButtons()
     {
         remove(play);
-       // remove(playCLI);
         remove(fullscreenButton);
     }
 
@@ -78,25 +77,16 @@ public abstract class Frame extends JFrame implements ActionListener {
     protected void addButtons() {
         fullscreen_button();
         play_button();
-       // play_CLI_button();
     }
 
     private void play_button()
     {
         play = new JButton("Play Hangman with graphics!");
-        play.setBounds(getWidth() / 4, getHeight() / 3,getWidth() / 6,getHeight() / 10);
+        play.setBounds(getWidth() / 4, getHeight() / 3,getWidth() / 2,getHeight() / 10);
         play.addActionListener(this);
         play.setVisible(true);
         add(play);
     }
-
-    /*
-    private void play_CLI_button() {
-        playCLI = new JButton("Play Hangman without graphics!");
-        playCLI.setBounds(getWidth() * 1100 / 1920,getHeight() / 3,getWidth() / 6,getHeight() / 10);
-        playCLI.addActionListener(this);
-        add(playCLI);
-    }//*/
 
     protected void exit_button()
     {
@@ -133,17 +123,6 @@ public abstract class Frame extends JFrame implements ActionListener {
             else
                 new Options(getWidth(), getHeight());
         }
-      /*  else if (e.getSource() == playCLI)
-        {
-            dispose();
-            int length = GraphicsLessGame.chooseLength();
-            int lives = GraphicsLessGame.chooseLives();
-            try {
-                new GraphicsLessGame(new Hangman(new File(Hangman.filename), length).toArray(), length, lives);
-            } catch (FileNotFoundException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-        } //*/
     }
 
     public boolean isFullscreen() {
