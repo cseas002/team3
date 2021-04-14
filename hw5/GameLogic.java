@@ -1,10 +1,25 @@
 package cseas002.team3.hw5;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Javadoc TBA
+ * The GameLogic class is used to make all the heavy decisions regarding which words to choose from whenever the player makes a decision.
+ * <p>
+ * In greater detail, its primary functionality is taking a lexicon and whenever the player decides on a letter, out of all the possible configurations of that letter GameLogic picks the most popular one and keeps the words of that configuration and discards all the others<br>
+ * Every such query requires a time complexity of O(N), where N is the total amount of words. To achieve this optimal speed it repressents words in a different way. <br>
+ * For each word, it stores it instead of a string or an array of character as an array of booleans for each letter in the alphabet. <br>
+ *  The array of booleans is implemented by an int, so its an array of ints for each letter. Each bit for a specific letter is true if that letter is contained in that specific index, for instance <br>
+ *  the word aabaz will have ints like so: <br>
+ * a:1       1       0       1       0 <br>
+ * b:0       0       1       0       0 <br>
+ * z:0       0       0       0       1 <br>
+ *  4th bit 3rd bit 2nd bit 1st bit 0th bit <br>
+ * The only inherent limitation this causes is that since we use integers the current implementation of GameLogic supports only words with a maximum length of 32 characters. That however is more than enough for our purposes.  
+ * 
+ * @author Orfeas Pliaridis
+ * @version 1.3
  */
 public class GameLogic {
 
@@ -12,7 +27,7 @@ public class GameLogic {
      * The number of letters in the English alphabet
      */
     public static final int LETTERPOP = ('Z' - 'A') + 1;
-
+    
     private Word[] words;//The array of words we can choose from
     private final char[] answer; //The answer
 
@@ -25,11 +40,11 @@ public class GameLogic {
      * @param wordLength The length of the answer to the Game.
      */
     public GameLogic(String[] lexicon, int wordLength) {
-        if (wordLength > 32) {
-            throw new IllegalArgumentException("Current implementation of GameLogic does not support words longer than 32 characters");
-        }
+    	if(wordLength>32) {
+    		throw new IllegalArgumentException("Current implementation of GameLogic does not support words longer than 32 characters");
+    	}
         lexicon = discardWordsOfDifferentLength(lexicon, wordLength);
-        if (lexicon == null || lexicon.length == 0) {
+        if (lexicon==null||lexicon.length == 0) {
             throw new IllegalArgumentException("Lexicon must contain at least 1 valid word");
         }
         answer = new char[wordLength];
@@ -43,9 +58,7 @@ public class GameLogic {
 
     //Discards all words with a different length from an array.
     private static String[] discardWordsOfDifferentLength(String[] arr, int length) {
-        if (arr == null) {
-            return null;
-        }
+        if(arr==null) {return null;}
         int pop = 0;
         for (String s : arr) {
             if (s.length() == length) {
@@ -106,10 +119,11 @@ public class GameLogic {
     }
 
     /**
-     * Returns how many times the character C occurs in the most popular configuration of that character in the lexicon.
-     * And removes all the words not of that configuration from the GameLogic.
+     * Returns how many times the character C occurs in the most popular configuration of that character in the lexicon. And removes all the words not of that configuration from the GameLogic.
+     *<p>
+     *c must be a letter of the English alphabet
      *
-     * @param c The character the player chose as a guess.
+     * @param c The character the player chose as a guess. Must be a letter of the English alphabet.
      * @return How many times C occurs in the word the GameLogic has in mind (or words because GameLogic cheats)
      */
     public int playerMove(char c) {
@@ -121,7 +135,7 @@ public class GameLogic {
     private int query(char c) {
         int letter = alphabetOrder(c);
 
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         //This map will take a configuration as a key and associate it with an integer representing how many times we have this configuration in our array of words.
         int bestConfiguration = 0;
         map.put(0, 0);
@@ -139,9 +153,9 @@ public class GameLogic {
                 map.put(tmp, map.get(tmp) + 1);
             }
             //If temporary configuration is now more popular than previous best configuration, then tmp is the new best Configuration.
-            int comp = map.get(bestConfiguration) - map.get(tmp);
+            int comp=map.get(bestConfiguration)-map.get(tmp);
             //In case of a tie we pick the configuration with the lowest number of bits, meaning hte one that has the least instances of the letter.
-            if (comp < 0 || (comp == 0 && Integer.bitCount(tmp) < Integer.bitCount(bestConfiguration))) {
+            if (comp<0||(comp==0&&Integer.bitCount(tmp)<Integer.bitCount(bestConfiguration))) {
                 bestConfiguration = tmp;
             }
         }
@@ -174,11 +188,27 @@ public class GameLogic {
         return c;
     }
 
+    /**
+     * Returns the current answer framework so far
+     * 
+     * @return the current answer framework so far
+     */
     public char[] getAnswer() {
         return answer;
     }
 
-    private static class Word {
+    /*
+    This private class is interesting, it takes a word and stores it instead of a string or an array of character as an array of booleans for each letter in the alphabet. The array
+    of booleans is implemented by an int, so its an array of ints for each letter. Each bit for a specific letter is true if that letter is contained in that specific index, for instance
+    the word
+    aabaz
+    will have ints like so:
+  a:1       1       0       1       0
+  b:0       0       1       0       0
+  z:0       0       0       0       1 
+    4th bit 3rd bit 2nd bit 1st bit 0th bit
+     */
+    private class Word {
         //private String s;
         private final int[] letterConfig;
 
@@ -193,8 +223,7 @@ public class GameLogic {
         /**
          * Returns the String representation of the Word. Its the same string that was used to construct it.
          * <p>
-         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects,
-         * and the only time needed is at the end of the Game if the player fails and we need to tell him which word we had in mind.<br>
+         * This is a very slow implementation, mainly because this is a private class and only the GameLogic class can use word objects, and the only time needed is at the end of the Game if the player fails and we need to tell him which word we had in mind.<br>
          * So there is no reason to store that value only to call it once.
          *
          * @return the String representation of the Word. Its the same string that was used to construct it.
@@ -211,8 +240,7 @@ public class GameLogic {
         }
     }
 
-    //The main I used to test this class
-
+    /*The main I used to test this class
     public static void main(String[] args) {
         String[] lexicon = {"Bob", "dog", "pub", "pad", "wog", "pog", "gog", "org", "potatopoophead"};
         GameLogic gl = new GameLogic(lexicon, 3);
