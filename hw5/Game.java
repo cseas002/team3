@@ -8,7 +8,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 /**
  * Class which controls the game's main frame
