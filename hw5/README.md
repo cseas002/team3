@@ -8,3 +8,5 @@
 
 ## Options class must extend the package's Frame class 
 ## (in case the program doesn't work)
+
+### For Mac OS replace \\\ with /
